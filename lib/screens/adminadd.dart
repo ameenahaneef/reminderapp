@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:newproj/screens/admin.dart';
 import 'package:newproj/screens/adminmodel.dart';
 import 'package:newproj/screens/categorydetails.dart';
+import 'package:newproj/screens/login.dart';
 
 class AdminAdd extends StatelessWidget {
   const AdminAdd({Key? key});
@@ -161,10 +161,13 @@ class _AddCategoryFormState extends State<AddCategoryForm> {
           const SizedBox(height: 16.0),
           IconButton(
             onPressed: () {
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (ctx1) => const AdminScreen()),
-                (route) => false,
-              );
+              // Navigator.of(context).pushAndRemoveUntil(
+              //   MaterialPageRoute(builder: (ctx1) => const LoginScreen()),
+              //   (route) => false,
+              // );
+              Navigator.of(context).push(MaterialPageRoute(builder: (ctx){
+                return LoginScreen();
+              }));
             },
             icon: const Icon(Icons.logout),
           ),

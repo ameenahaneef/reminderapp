@@ -16,6 +16,7 @@ class DietEdit extends StatefulWidget {
 }
 
 class _DietEditState extends State<DietEdit> {
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,18 +26,22 @@ class _DietEditState extends State<DietEdit> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: AddCategoryForm(),
+        child: AddCategoryForm(selectedCategoryIndex:widget.selectedCategoryIndex),
       ),
     );
   }
 }
 
 class AddCategoryForm extends StatefulWidget {
+  final int selectedCategoryIndex;
+  const AddCategoryForm({Key? key,required this.selectedCategoryIndex}):super(key: key);
   @override
-  _AddCategoryFormState createState() => _AddCategoryFormState();
+  _AddCategoryFormState createState() => _AddCategoryFormState(selectedCategoryIndex:selectedCategoryIndex);
 }
 
 class _AddCategoryFormState extends State<AddCategoryForm> {
+  final int selectedCategoryIndex;
+  _AddCategoryFormState({required this.selectedCategoryIndex});
   File? _image;
 
   Future getImage() async {
@@ -61,7 +66,6 @@ class _AddCategoryFormState extends State<AddCategoryForm> {
   );
 
   static const List<String> mealTimes = ['Breakfast', 'Lunch', 'Dinner'];
-int selectedCategoryIndex=0;
 
   @override
   void initState() {
