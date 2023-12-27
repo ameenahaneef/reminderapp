@@ -161,13 +161,11 @@ class _AddCategoryFormState extends State<AddCategoryForm> {
           const SizedBox(height: 16.0),
           IconButton(
             onPressed: () {
-              // Navigator.of(context).pushAndRemoveUntil(
-              //   MaterialPageRoute(builder: (ctx1) => const LoginScreen()),
-              //   (route) => false,
-              // );
-              Navigator.of(context).push(MaterialPageRoute(builder: (ctx){
-                return LoginScreen();
-              }));
+              Navigator.of(context).pushAndRemoveUntil(
+                MaterialPageRoute(builder: (ctx1) => const LoginScreen()),
+                (route) => false,
+              );
+              
             },
             icon: const Icon(Icons.logout),
           ),

@@ -37,12 +37,15 @@ class DietScreen extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: const EdgeInsets.only(left:18.0,right: 18),
           child: GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2, // You can adjust the number of columns here
               crossAxisSpacing: 8.0,
               mainAxisSpacing: 8.0,
+              
+             
+            
             ),
             itemCount: categories.length,
             itemBuilder: (context, index) {
@@ -55,8 +58,9 @@ class DietScreen extends StatelessWidget {
                   // Handle category tap, if needed
                 },
                 child: Card(
+                  
                   color: const Color.fromARGB(255, 189, 156, 195),
-                  //elevation: 2.0,
+                elevation: 2.0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(28.0),
                   ),
@@ -64,7 +68,6 @@ class DietScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       ClipRRect(
-                       // borderRadius: BorderRadius.only(topLeft: Radius.circular(28.0),topRight: Radius.circular(28.0)),
                         borderRadius: BorderRadius.circular(28),
                         child: Image.file(
                           File(category.imagePath), // Assuming imagePath is a valid file path

@@ -13,12 +13,9 @@ class UserScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 116, 74, 129),
-        //title: Text('User Screen - ${selectedCategory.categoryName}'),
         elevation: 0,
       ),
       body: Container(
-        //width: MediaQuery.of(context).size.width,
-      //height: MediaQuery.of(context).size.height,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment.topCenter,
@@ -33,45 +30,46 @@ class UserScreen extends StatelessWidget {
       ),
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(16.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Center(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(100),
-                      child: Image.file(
-                                  File(selectedCategory.imagePath),
-                                  height: 200,
-                                  width: 200,
-                                  fit: BoxFit.cover,
-                                ),
-                    )),
-                Center(child: Text('${selectedCategory.categoryName}',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold,color: Colors.white),)),
-                Card(
-                    margin: EdgeInsets.all(16.0),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: Image.file(
+                              File(selectedCategory.imagePath),
+                              height: 200,
+                              width: 200,
+                              fit: BoxFit.cover,
+                            ),
+                ),
+                SizedBox(height: 16,),
+                Text('${selectedCategory.categoryName}',style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold,color: Colors.white),),
+                Card(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                    margin: EdgeInsets.symmetric(vertical: 16,horizontal: 8),
                   color:  Color.fromARGB(255, 220, 210, 223),
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
-                      child: Text('${selectedCategory.description}',style: TextStyle(color: Colors.black),),
+                      child: Text('${selectedCategory.description}',style: TextStyle(color: Colors.black,fontSize: 16),),
                     )),
-                Center(child: Text('Meal Plan:',style: TextStyle(color: Colors.white,fontSize: 20),)),
+                Center(child: Text('Meal Plan:',style: TextStyle(color: Colors.white,fontSize: 20,fontWeight: FontWeight.bold),)),
                 for (int day = 0; day < selectedCategory.mealPlan.length; day++)
                   Container(
                     width: double.infinity,
-                    child: Card(
-                      margin: EdgeInsets.all(16.0),
+                    child: Card(shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20),),color: Color.fromARGB(255, 220, 210, 223),
+                      margin: EdgeInsets.symmetric(vertical: 16,horizontal: 8),
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Day ${day + 1}'),
+                            Text('Day ${day + 1}',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                            SizedBox(height: 8,),
                             for (int meal = 0;
                                 meal < selectedCategory.mealPlan[day].length;
                                 meal++)
                               Text(
-                                  '${mealTimes[meal]}: ${selectedCategory.mealPlan[day][meal]}'),
+                                  '${mealTimes[meal]}: ${selectedCategory.mealPlan[day][meal]}',style: TextStyle(fontSize: 16),),
                             const SizedBox(height: 8.0),
                           ],
                         ),
