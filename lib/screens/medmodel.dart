@@ -1,27 +1,37 @@
+
 import 'package:hive/hive.dart';
+
 part 'medmodel.g.dart';
 @HiveType(typeId: 2)
-class MedicineModel {
+class MedicineModel extends HiveObject {
   @HiveField(0)
-  String name;
-  @HiveField(1)
-  String dosage;
-  @HiveField(2)
-  String description;
-  @HiveField(3)
-  String type;
-  @HiveField(4)
-  List<DateTime> selectedDates;
-  @HiveField(5)
-  List<String> selectedTimes;
+  late String name;
 
-  MedicineModel(
-      {required this.name,
-      required this.dosage,
-      required this.description,
-      required this.type,
-      List<DateTime>? selectedDates,
-      List<String>? selectedTimes})
-      : selectedDates = selectedDates ?? [],
-        selectedTimes = selectedTimes ?? [];
+  @HiveField(1)
+  late String dosage;
+
+  @HiveField(2)
+  late String description;
+
+  @HiveField(3)
+  late String type;
+
+  @HiveField(4)
+  late String foodTime;
+
+  @HiveField(5)
+  late int frequency;
+
+  @HiveField(6)
+  late String startingTime;
+
+  MedicineModel({
+    required this.name,
+    required this.dosage,
+    required this.description,
+    required this.type,
+    required this.foodTime,
+    required this.frequency,
+    required this.startingTime,
+  });
 }

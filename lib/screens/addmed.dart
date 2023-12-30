@@ -1,10 +1,8 @@
-
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:newproj/screens/dailydose.dart';
 import 'package:newproj/screens/medmodel.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:newproj/screens/notiservice.dart';
 
@@ -21,11 +19,17 @@ class AddMed extends StatefulWidget {
 class _AddMedState extends State<AddMed> {
   late Box boxes;
   late Box historyBox;
+  late NotificationsServices notificationsServices;
+  String selectedFoodTiming = 'Before Food';
+  int selectedFrequency = 1; // Default to once a day
+
   @override
   void initState() {
     super.initState();
     boxes = Hive.box<MedicineModel>('MedicineModelBox');
     historyBox = Hive.box<MedicineModel>('MedicineHistoryBox');
+    notificationsServices = NotificationsServices();
+    notificationsServices.initialiseNotifications();
   }
 
   Widget seperator = const SizedBox(
@@ -53,8 +57,7 @@ class _AddMedState extends State<AddMed> {
                 borderSide: const BorderSide(color: Colors.white)),
             errorBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),
-              borderSide: const BorderSide(
-                  color: Colors.red), 
+              borderSide: const BorderSide(color: Colors.red),
             ),
             labelText: label,
             labelStyle: const TextStyle(color: Colors.white)),
@@ -156,58 +159,95 @@ class _AddMedState extends State<AddMed> {
                     }).toList(),
                   ),
                   seperator,
-                  const Text(
-                    'Select Days',
-                    style: TextStyle(color: Colors.white),
-                  ),
+
+                  
+
                   Row(
                     children: [
-                      Row(
-                        children: [
-                          Radio(
-                            value: true,
-                            groupValue: everydaySelected,
-                            onChanged: (bool? value) async {
-                              setState(() {
-                                everydaySelected = value;
-                              });
-                              if (value == true) {
-                                await _selectDateRange(context);
-                              }
-                            },
-                          ),
-                          const Text(
-                            'Everyday',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ],
+                      Radio(
+                        value: 'Before Food',
+                        groupValue: selectedFoodTiming,
+                        onChanged: (String? value) {
+                          setState(() {
+                            selectedFoodTiming = value!;
+                          });
+                        },
                       ),
-                      Row(
-                        children: [
-                          Radio(
-                            value: false,
-                            groupValue: everydaySelected,
-                            onChanged: (bool? value) {
-                              setState(() {
-                                everydaySelected = value;
-                              });
-                              if (value == false) {
-                                _selectDateRange(context);
-                              }
-                            },
-                          ),
-                          const Text(
-                            'Every alternative day',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                        ],
+                      const Text(
+                        'Before Food',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      Radio(
+                        value: 'After Food',
+                        groupValue: selectedFoodTiming,
+                        onChanged: (String? value) {
+                          setState(() {
+                            selectedFoodTiming = value!;
+                          });
+                        },
+                      ),
+                      const Text(
+                        'After Food',
+                        style: TextStyle(color: Colors.white),
                       ),
                     ],
                   ),
                   seperator,
+                  Row(
+                    children: [
+                      Center(
+                        child: Container(
+                          width: 290,
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.white),
+                              borderRadius: BorderRadius.circular(30)),
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 100),
+                            child: DropdownButton<int>(
+                              value: selectedFrequency,
+                              onChanged: (int? value) {
+                                setState(() {
+                                  selectedFrequency = value!;
+                                });
+                              },
+                              style: const TextStyle(
+                                  color:
+                                      Colors.white), // Set text color to white
+                              underline: Container(), // Remove the underline
+                              dropdownColor: Colors.black,
+                              items: const [
+                                DropdownMenuItem<int>(
+                                  value: 1,
+                                  child: Text('Once a day'),
+                                ),
+                                DropdownMenuItem<int>(
+                                  value: 2,
+                                  child: Text('Twice a day'),
+                                ),
+                                DropdownMenuItem<int>(
+                                  value: 3,
+                                  child: Text('Thrice a day'),
+                                ),
+                                DropdownMenuItem<int>(
+                                  value: 4,
+                                  child: Text('Four times a day'),
+                                ),
+                              ],
+                              icon: Icon(
+                                Icons.arrow_drop_down,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+
+                  seperator,
                   ElevatedButton(
                     onPressed: () async {
-                      await _selectTime(context);
+                     await _selectStartingTime();
                     },
                     style: ElevatedButton.styleFrom(
                         side: const BorderSide(color: Colors.white),
@@ -216,7 +256,7 @@ class _AddMedState extends State<AddMed> {
                             borderRadius: BorderRadius.circular(30)),
                         backgroundColor: Colors.transparent),
                     child: const Text(
-                      'Select time',
+                      'Starting time',
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
@@ -231,45 +271,24 @@ class _AddMedState extends State<AddMed> {
                   seperator,
                   ElevatedButton(
                     onPressed: () {
-                      if (selectedDates.isEmpty || selectedTimes.isEmpty) {
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: const Text('Incomplete Selection'),
-                              content: const Text(
-                                  'Please select both date and time for your medicine.'),
-                              actions: [
-                                TextButton(
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                  child: Text('OK'),
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      } else {
-                        // setState(() {
-                          if (_formKey.currentState!.validate()) {
-                            saveMedicineToHive();
-                            Navigator.of(context)
-                                .push(MaterialPageRoute(builder: (ctx) {
-                              return DailyDose();
-                            }));
-                          }
-                        // });
+                      if (_formKey.currentState!.validate()) {
+                        saveMedicineToHive();
+                        Navigator.of(context)
+                            .push(MaterialPageRoute(builder: (ctx) {
+                          return DailyDose();
+                        }));
                       }
+                      // });
                     },
-                    style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white),
+                    style:
+                        ElevatedButton.styleFrom(backgroundColor: Colors.white),
                     child: const Text(
                       'Save',
                       style: TextStyle(color: Colors.black),
                     ),
                   ),
-                  //TextButton(onPressed: (){notificationsServices.sendNotification("title", "body");}, child: Text('hi'))
+                  TextButton(onPressed: (){
+                    notificationsServices.sendNotification("title", "body");}, child: const Text('hi'))
                 ],
               ),
             ),
@@ -285,12 +304,14 @@ class _AddMedState extends State<AddMed> {
       dosage: doseController.text,
       description: desController.text,
       type: selectedChoice,
-      selectedDates: selectedDates,
-      selectedTimes: selectedTimes.map((time) => time.format(context)).toList(),
+      foodTime: selectedFoodTiming, 
+      frequency: selectedFrequency, 
+      startingTime: selectedTimes.isNotEmpty ? selectedTimes.first.format(context) : '', 
+      
     );
 
     await boxes.add(medicine);
-    await historyBox.add(medicine);
+    
 
     print('data stored suuceesfully');
     print('name:${medicine.name}');
@@ -299,11 +320,9 @@ class _AddMedState extends State<AddMed> {
     print('description:${medicine.description}');
 
     print('type:${medicine.type}');
-    print(
-        'date:${medicine.selectedDates.toSet().map((date) => DateFormat('yyyy-MM-dd').format(date))}');
-    print('times:${medicine.selectedTimes}');
-
-    
+    print('foodtime:${medicine.foodTime}');
+    print('interval:${medicine.frequency}');
+    print('startingtime:${medicine.startingTime}');
   }
 
   List<Widget> selectedDaysChips() {
@@ -337,88 +356,19 @@ class _AddMedState extends State<AddMed> {
 
     return chips;
   }
+  Future<void> _selectStartingTime() async {
+  TimeOfDay? pickedTime = await showTimePicker(
+    context: context,
+    initialTime: TimeOfDay.now(),
+  );
 
-  Future<void> _selectDateRange(BuildContext context) async {
-    DateTime currentDate = DateTime.now();
-    DateTime lastDate = currentDate.add(Duration(days: 365));
-
-    selectedDateRange = await showDateRangePicker(
-      context: context,
-      firstDate: currentDate,
-      lastDate: lastDate,
-    );
-
-    if (selectedDateRange != null) {
-      setState(() {
-        selectedDateRange = selectedDateRange;
-        selectedDates.clear();
-        if (everydaySelected == true) {
-          selectedDates.addAll(getDatesInRange(selectedDateRange!));
-        } else {
-          selectedDates.addAll(getAlternateDatesInRange(selectedDateRange!));
-        }
-      });
-      for (int i = 0; i < selectedDates.length; i++) {
-        DateTime date = selectedDates[i];
-        for (int j = 0; j < selectedTimes.length; j++) {
-          TimeOfDay time = selectedTimes[j];
-          DateTime ScheduledDateTime =
-              DateTime(date.year, date.month, date.day, time.hour, time.minute);
-          print('scheduled Date:$ScheduledDateTime');
-        }
-      }
-    }
+  if (pickedTime != null) {
+    setState(() {
+      selectedTimes=[pickedTime];
+      //selectedTimes.add(pickedTime);
+    });
   }
+}
 
-  List<DateTime> getAlternateDatesInRange(DateTimeRange dateRange) {
-    List<DateTime> dates = [];
-    DateTime currentDate = dateRange.start;
-    bool alternateDay = false;
-
-    while (currentDate.isBefore(dateRange.end)) {
-      dates.add(currentDate);
-      currentDate = currentDate.add(Duration(days: alternateDay ? 2 : 0));
-      alternateDay = !alternateDay;
-    }
-
-    return dates;
-  }
-
-  List<DateTime> getDatesInRange(DateTimeRange dateRange) {
-    List<DateTime> dates = [];
-    DateTime currentDate = dateRange.start;
-
-    while (currentDate.isBefore(dateRange.end)) {
-      dates.add(currentDate);
-      currentDate = currentDate.add(Duration(days: 1));
-    }
-
-    return dates;
-  }
-
-  Future<void> _selectTime(BuildContext context) async {
-    TimeOfDay? selectedTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
-
-    if (selectedTime != null && selectedDateRange != null) {
-      DateTime scheduledDateTime = DateTime(
-        selectedDateRange!.start.year,
-        selectedDateRange!.start.month,
-        selectedDateRange!.start.day,
-        selectedTime.hour,
-        selectedTime.minute,
-      );print('${scheduledDateTime}');
-        selectedTimes.add(selectedTime);
-        NotificationsServices notificationsServices=NotificationsServices();
-      await notificationsServices.scheduleNotification(0,'medicine reminder','take your medicine',scheduledDateTime);
-//notificationsServices.sendNotification("title", "body"); //child: Text('hi');
-     
-      setState(() {
-
-      });
-    }
-  }
-
+  
 }

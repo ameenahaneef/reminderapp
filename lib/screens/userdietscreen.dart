@@ -63,13 +63,13 @@ class UserScreen extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Day ${day + 1}',style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),),
+                            Text('Day ${day + 1}',style: TextStyle(fontSize: 18,fontWeight: FontWeight.w600),),
                             SizedBox(height: 8,),
                             for (int meal = 0;
                                 meal < selectedCategory.mealPlan[day].length;
                                 meal++)
-                              Text(
-                                  '${mealTimes[meal]}: ${selectedCategory.mealPlan[day][meal]}',style: TextStyle(fontSize: 16),),
+                              ListTile(title: Text('${mealTimes[meal]}',style:TextStyle(fontSize: 18,fontWeight: FontWeight.w500,) ,),subtitle: Text(selectedCategory.mealPlan[day][meal],style: TextStyle(fontSize: 15,color: Colors.black),),),
+    
                             const SizedBox(height: 8.0),
                           ],
                         ),

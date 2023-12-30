@@ -252,17 +252,13 @@ class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                                        style: const TextStyle(color: Colors.white, fontSize: 20),
                                      ),
                                      seper,
-                                     Text(
-                                       'Selected Dates: ${_formatDates(widget.medicine.selectedDates)}',
-                                       style: const TextStyle(color: Colors.white, fontSize: 20),
-                                     ),
+                                     Text('food time:${widget.medicine.foodTime}',style: const TextStyle(color: Colors.white,fontSize: 20),),
+                                    
+                                     
                                      seper,
-                                     Text(
-                                       'Selected Times: ${widget.medicine.selectedTimes.join(", ")}',
-                                       style: const TextStyle(color: Colors.white, fontSize: 20),
-                                     ),
+                                     Text('Interval:${widget.medicine.frequency}',style: TextStyle(color: Colors.white,fontSize: 20),),
                                      seper,
-                                     seper,
+                                     Text('starting time:${widget.medicine.startingTime}',style: TextStyle(color: Colors.white,fontSize: 20),),
                                      Row(
                                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                        children: [
@@ -272,7 +268,7 @@ class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                         onPressed: () {
                           Navigator.of(context)
                               .push(MaterialPageRoute(builder: (ctx) {
-                            return EditMed(medicine: widget.medicine);
+                            return EditMed(medicine:widget.medicine ,);
                           }));
                         },
                         child: const Text(

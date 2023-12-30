@@ -83,9 +83,12 @@ class MainHome extends StatelessWidget {
                                     width: 120,
                                     height: 120,
                                   ),
-                                  Text(
-                                    'Dont forget to take\nyour medication at the\nprescribed time to maintain\nconsistent treatment',
-                                    style: TextStyle(color: Colors.white),
+                                  Padding(
+                                    padding: EdgeInsets.only(right: 10),
+                                    child: Text(
+                                      'Dont forget to take\nyour medication at the\nprescribed time to maintain\nconsistent treatment',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
                                   )
                                 ],
                               )),
@@ -128,9 +131,12 @@ class MainHome extends StatelessWidget {
                                     width: 120,
                                     height: 120,
                                   ),
-                                  Text(
-                                    'Remember to sip water\nthroughout the day\nto keep your body and mind \nrefreshed.',
-                                    style: TextStyle(color: Colors.white),
+                                  Padding(
+                                    padding: EdgeInsets.only(right: 10),
+                                    child: Text(
+                                      'Remember to sip water\nthroughout the day\nto keep your body and mind \nrefreshed.',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
                                   ),
                                 ],
                               )),
@@ -170,10 +176,13 @@ class MainHome extends StatelessWidget {
                                         AssetImage('assets/images/Plate.png'),
                                     width: 120,
                                     height: 120,
-                                  ),
-                                  Text(
-                                    'Fuel your body with\nnutritious choices.\nYour health is your wealth!',
-                                    style: TextStyle(color: Colors.white),
+                                  ),  
+                                  Padding(
+                                    padding: EdgeInsets.only(right: 18),
+                                    child: Text(
+                                      'Fuel your body with\nnutritious choices.\nYour health is your wealth!',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
                                   ),
                                 ],
                               )),
