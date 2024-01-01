@@ -21,8 +21,8 @@ class MedicineModelAdapter extends TypeAdapter<MedicineModel> {
       dosage: fields[1] as String,
       description: fields[2] as String,
       type: fields[3] as String,
-      selectedDates: (fields[4] as List?)?.cast<DateTime>(),
-      selectedTimes: (fields[5] as List?)?.cast<String>(),
+      beforeOrAfter: fields[4] as String,
+      selectedTimes: (fields[5] as List).cast<String>(),
     );
   }
 
@@ -39,7 +39,7 @@ class MedicineModelAdapter extends TypeAdapter<MedicineModel> {
       ..writeByte(3)
       ..write(obj.type)
       ..writeByte(4)
-      ..write(obj.selectedDates)
+      ..write(obj.beforeOrAfter)
       ..writeByte(5)
       ..write(obj.selectedTimes);
   }

@@ -11,7 +11,7 @@ class MedicineModel {
   @HiveField(3)
   String type;
   @HiveField(4)
-  List<DateTime> selectedDates;
+  String beforeOrAfter;
   @HiveField(5)
   List<String> selectedTimes;
 
@@ -20,8 +20,8 @@ class MedicineModel {
       required this.dosage,
       required this.description,
       required this.type,
-      List<DateTime>? selectedDates,
-      List<String>? selectedTimes})
-      : selectedDates = selectedDates ?? [],
-        selectedTimes = selectedTimes ?? [];
+      required this.beforeOrAfter,
+      required this.selectedTimes,
+     
+});
 }

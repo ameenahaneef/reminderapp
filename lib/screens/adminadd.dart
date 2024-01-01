@@ -5,6 +5,8 @@ import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:newproj/screens/adminmodel.dart';
 import 'package:newproj/screens/categorydetails.dart';
+import 'package:newproj/screens/dbfunctions/admindataase.dart';
+import 'package:newproj/screens/dbfunctions/meddatabase.dart';
 import 'package:newproj/screens/login.dart';
 
 class AdminAdd extends StatelessWidget {
@@ -103,7 +105,7 @@ class _AddCategoryFormState extends State<AddCategoryForm> {
 
 
           ElevatedButton(
-  onPressed: () {
+  onPressed: ()async {
 
 // Check if any of the required fields is empty
     if (categoryNameController.text.isEmpty ||
@@ -123,37 +125,59 @@ class _AddCategoryFormState extends State<AddCategoryForm> {
       print('Please fill in all the required fields');
       return;
     }
-
-    var category = Category(
-      categoryName: categoryNameController.text,
-      description: descriptionController.text,
-      imagePath: _image?.path ?? '', // Assuming imagePath is a String
-      mealPlan: mealControllers.map((controllers) => controllers.map((controller) => controller.text).toList()).toList(),
-    );
-
-
-  print('Category Data: $category'); // Print the category data
-
-    var categoryBox = Hive.box<Category>('categoryBox');
-    categoryBox.add(category);
-    ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('stored successfully'),
-          backgroundColor: Colors.green,),
-        );
-     print('Category added to Hive');
-     setState(() {
-       _image=null;
-       categoryNameController.clear();
-       descriptionController.clear();
-        mealControllers.forEach((day) => day.forEach((meal) => meal.clear()));
-     });
     
 
+  //   var category = Category(
+  //     categoryName: categoryNameController.text,
+  //     description: descriptionController.text,
+  //     imagePath: _image?.path ?? '', // Assuming imagePath is a String
+  //     mealPlan: mealControllers.map((controllers) => controllers.map((controller) => controller.text).toList()).toList(),
+  //   );
 
+
+  // print('Category Data: $category'); // Print the category data
+
+  //   var categoryBox = Hive.box<Category>('categoryBox');
+  //   categoryBox.add(category);
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(content: Text('stored successfully'),
+  //         backgroundColor: Colors.green,),
+  //       );
+  //    print('Category added to Hive');
+  //    setState(() {
+  //      _image=null;
+  //      categoryNameController.clear();
+  //      descriptionController.clear();
+  //       mealControllers.forEach((day) => day.forEach((meal) => meal.clear()));
+  //    });
+    
+
+// Assuming _image is a File
+    File? imageFile = _image;
+
+    // Assuming mealControllers is a 2D list of TextEditingController
+    List<List<String>> mealPlan = mealControllers
+        .map((controllers) => controllers.map((controller) => controller.text).toList())
+        .toList();
 
 
      
-    print('Retrieved Category Data: ${category.categoryName}');// Print a message indicating 
+  //   print('Retrieved Category Data: ${category.categoryName}');// Print a message indicating 
+  await DatabaseOperations.saveCategory(categoryName: categoryNameController.text, description: descriptionController.text, image: imageFile, mealPlan: mealPlan);
+   ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Stored successfully'),
+        backgroundColor: Colors.green,
+      ),
+    );
+
+      setState(() {
+      _image = null;
+      categoryNameController.clear();
+      descriptionController.clear();
+      mealControllers.forEach((day) => day.forEach((meal) => meal.clear()));
+    });
+  
   },
   child: const Text('Save Category'),
 ),
@@ -161,11 +185,11 @@ class _AddCategoryFormState extends State<AddCategoryForm> {
           const SizedBox(height: 16.0),
           IconButton(
             onPressed: () {
-              Navigator.of(context).pushAndRemoveUntil(
-                MaterialPageRoute(builder: (ctx1) => const LoginScreen()),
-                (route) => false,
-              );
-              
+             
+              Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => const LoginScreen()),
+    );
             },
             icon: const Icon(Icons.logout),
           ),

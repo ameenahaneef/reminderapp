@@ -68,9 +68,21 @@ class UserScreen extends StatelessWidget {
                             for (int meal = 0;
                                 meal < selectedCategory.mealPlan[day].length;
                                 meal++)
-                              Text(
-                                  '${mealTimes[meal]}: ${selectedCategory.mealPlan[day][meal]}',style: TextStyle(fontSize: 16),),
-                            const SizedBox(height: 8.0),
+                            //   Text(
+                            //       '${mealTimes[meal]}: ${selectedCategory.mealPlan[day][meal]}',style: TextStyle(fontSize: 16),),
+                            // const SizedBox(height: 8.0),
+                                          ListTile(
+                title: Text(
+                  mealTimes[meal],
+                  style: TextStyle(fontSize: 16),
+                ),
+                subtitle: Text(
+                  selectedCategory.mealPlan[day][meal],
+                  style: TextStyle(fontSize: 16),
+                ),
+              ),
+            const SizedBox(height: 8.0),
+
                           ],
                         ),
                       ),
