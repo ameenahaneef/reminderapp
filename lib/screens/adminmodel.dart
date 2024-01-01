@@ -2,7 +2,7 @@ import 'package:hive/hive.dart';
 
 part 'adminmodel.g.dart';
 
-@HiveType(typeId: 3) // Use a unique typeId for each HiveType
+@HiveType(typeId: 3) 
 class Category {
   @HiveField(0)
   late final String categoryName;

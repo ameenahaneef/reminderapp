@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:newproj/screens/dietdetails.dart';
 import 'package:newproj/screens/dietedit.dart';
-import 'adminmodel.dart'; // Import your Category class
-
+import 'adminmodel.dart'; 
 class CategoryDisplay extends StatefulWidget {
   @override
   State<CategoryDisplay> createState() => _CategoryDisplayState();
@@ -39,7 +38,6 @@ class _CategoryDisplayState extends State<CategoryDisplay> {
                       category.categoryName,
                       style: TextStyle(color: Colors.white),
                     ),
-                    //subtitle: Text(category.description),
                     leading: ClipOval(
                       child: Image.file(
                         File(category.imagePath),

@@ -34,7 +34,7 @@ class _EditMedState extends State<EditMed> {
     super.initState();
     boxes = Hive.box<MedicineModel>('MedicineModelBox');
     historyBox = Hive.box<MedicineModel>('MedicineHistoryBox');
-    notificationsServices = NotificationsServices(); 
+    notificationsServices = NotificationsServices();
     notificationsServices.initialiseNotifications();
     nameController.text = widget.medicine.name;
     doseController.text = widget.medicine.dosage;
@@ -88,7 +88,6 @@ class _EditMedState extends State<EditMed> {
 
   List<String> choices = ['Syrup', 'Tablet', 'Injections', 'inhalers'];
   String selectedChoice = 'Syrup';
-
 
   @override
   Widget build(BuildContext context) {
@@ -212,12 +211,14 @@ class _EditMedState extends State<EditMed> {
                   seperator,
                   ElevatedButton(
                     onPressed: () async {
-                     
-                      
-                      TimeOfDay? pickedTime=await showTimePicker(context: context, initialTime: TimeOfDay.now(),);
-                      if(pickedTime!=null){
+                      TimeOfDay? pickedTime = await showTimePicker(
+                        context: context,
+                        initialTime: TimeOfDay.now(),
+                      );
+                      if (pickedTime != null) {
                         setState(() {
-                          selectedTimes.add('${pickedTime.hour}:${pickedTime.minute}');
+                          selectedTimes
+                              .add('${pickedTime.hour}:${pickedTime.minute}');
                         });
                       }
                     },
@@ -237,27 +238,28 @@ class _EditMedState extends State<EditMed> {
                     spacing: 8.0,
                     children: selectedTimes.map((String time) {
                       return Chip(
-                        label: Text(time,style: TextStyle(color: Colors.white),),
-                        backgroundColor:
-                        Colors.black,
-                             //Color.fromARGB(255, 132, 94, 139), 
-                            deleteIconColor: Colors.white,
-                            onDeleted: (){
-                              setState(() {
-                                selectedTimes.remove(time);
-                              });
-                            },
+                        label: Text(
+                          time,
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        backgroundColor: Colors.black,
+                        
+                        deleteIconColor: Colors.white,
+                        onDeleted: () {
+                          setState(() {
+                            selectedTimes.remove(time);
+                          });
+                        },
                       );
                     }).toList(),
                   ),
-                   
-
                   seperator,
                   ElevatedButton(
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         saveUpdatedData();
-                                                notificationsServices.sendNotification("welldone", "changes saved successfully");
+                        notificationsServices.sendNotification(
+                            "welldone", "changes saved successfully");
 
                         Navigator.of(context)
                             .push(MaterialPageRoute(builder: (ctx) {
@@ -272,7 +274,6 @@ class _EditMedState extends State<EditMed> {
                       style: TextStyle(color: Colors.black),
                     ),
                   ),
-                 
                 ],
               ),
             ),
@@ -281,10 +282,17 @@ class _EditMedState extends State<EditMed> {
       ),
     );
   }
-  void saveUpdatedData(){
-    MedicineModel updatedMedicine=MedicineModel(name: nameController.text, dosage: doseController.text, description: desController.text, type: selectedChoice, beforeOrAfter: beforeFoodSelected==true?'before food':'after food', selectedTimes: selectedTimes);
-  
-  DatabaseHelper().updateMedicine(widget.medicine, updatedMedicine);
 
-}
+  void saveUpdatedData() {
+    MedicineModel updatedMedicine = MedicineModel(
+        name: nameController.text,
+        dosage: doseController.text,
+        description: desController.text,
+        type: selectedChoice,
+        beforeOrAfter:
+            beforeFoodSelected == true ? 'before food' : 'after food',
+        selectedTimes: selectedTimes);
+
+    DatabaseHelper().updateMedicine(widget.medicine, updatedMedicine);
+  }
 }

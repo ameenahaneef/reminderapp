@@ -1,5 +1,3 @@
-// database_helper.dart
-
 import 'package:hive/hive.dart';
 import 'package:newproj/screens/medmodel.dart';
 
@@ -39,13 +37,14 @@ class DatabaseHelper {
     print('Type: $type');
     print('Times: $selectedTimes');
   }
-void updateMedicine(MedicineModel oldMedicine, MedicineModel newMedicine) {
-    int index = boxes.values.toList().indexWhere((medicine) => medicine == oldMedicine);
+
+  void updateMedicine(MedicineModel oldMedicine, MedicineModel newMedicine) {
+    int index =
+        boxes.values.toList().indexWhere((medicine) => medicine == oldMedicine);
     if (index != -1) {
       boxes.putAt(index, newMedicine);
     }
   }
-
 
   Future<void> deleteMedicine(MedicineModel medicine) async {
     final index = boxes.values.toList().indexOf(medicine);
@@ -53,9 +52,4 @@ void updateMedicine(MedicineModel oldMedicine, MedicineModel newMedicine) {
       boxes.deleteAt(index);
     }
   }
-
- 
 }
-
-
-

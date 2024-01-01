@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:newproj/screens/adminmodel.dart';
 
@@ -10,13 +9,11 @@ class DatabaseOperations {
     required File? image,
     required List<List<String>> mealPlan,
   }) async {
-    // Check if any of the required fields is empty
     if (categoryName.isEmpty ||
         description.isEmpty ||
         image == null ||
         mealPlan.any((day) => day.any((meal) => meal.isEmpty))) {
           
-      // Show an error message or handle the case where fields are empty
       print('Please fill in all the required fields');
       return;
     }
@@ -24,11 +21,11 @@ class DatabaseOperations {
     var category = Category(
       categoryName: categoryName,
       description: description,
-      imagePath: image.path ?? '', // Assuming imagePath is a String
+      imagePath: image.path ?? '', 
       mealPlan: mealPlan,
     );
 
-    print('Category Data: $category'); // Print the category data
+    print('Category Data: $category'); 
 
     var categoryBox = Hive.box<Category>('categoryBox');
     categoryBox.add(category);

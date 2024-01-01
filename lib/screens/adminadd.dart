@@ -1,12 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:newproj/screens/adminmodel.dart';
 import 'package:newproj/screens/categorydetails.dart';
 import 'package:newproj/screens/dbfunctions/admindataase.dart';
-import 'package:newproj/screens/dbfunctions/meddatabase.dart';
 import 'package:newproj/screens/login.dart';
 
 class AdminAdd extends StatelessWidget {
@@ -16,16 +13,17 @@ class AdminAdd extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:Color.fromARGB(255, 127, 65, 138),
+        backgroundColor: Color.fromARGB(255, 127, 65, 138),
         title: const Text('Admin - Add Category'),
         actions: [
-          IconButton(onPressed: (){
-            Navigator.of(context).push(MaterialPageRoute(builder: (ctx){
-              return CategoryDisplay();
-            }));
-          }, icon: Icon(Icons.category))
+          IconButton(
+              onPressed: () {
+                Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+                  return CategoryDisplay();
+                }));
+              },
+              icon: Icon(Icons.category))
         ],
-        
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -41,7 +39,6 @@ class AddCategoryForm extends StatefulWidget {
 }
 
 class _AddCategoryFormState extends State<AddCategoryForm> {
-
   File? _image;
 
   Future getImage() async {
@@ -56,30 +53,40 @@ class _AddCategoryFormState extends State<AddCategoryForm> {
   }
 
   final TextEditingController categoryNameController = TextEditingController();
-  final TextEditingController descriptionController=TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
   final List<List<TextEditingController>> mealControllers = List.generate(
     7,
     (index) => List.generate(
-      3, // 3 meals per day
+      3,
       (index) => TextEditingController(),
     ),
   );
 
   static const List<String> mealTimes = ['Breakfast', 'Lunch', 'Dinner'];
 
-
-
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
         children: [
-          GestureDetector(onTap: getImage,child: _image==null?Container(width:250,height: 200,color: Colors.grey[300],child: Center(child: Icon(Icons.camera_alt,size: 50),),):Image.file(_image!),),
+          GestureDetector(
+            onTap: getImage,
+            child: _image == null
+                ? Container(
+                    width: 250,
+                    height: 200,
+                    color: Colors.grey[300],
+                    child: Center(
+                      child: Icon(Icons.camera_alt, size: 50),
+                    ),
+                  )
+                : Image.file(_image!),
+          ),
           TextField(
             controller: categoryNameController,
             decoration: const InputDecoration(labelText: 'Category Name'),
           ),
-           const SizedBox(height: 16.0),
+          const SizedBox(height: 16.0),
           TextField(
             controller: descriptionController,
             decoration: const InputDecoration(labelText: 'Description'),
@@ -102,94 +109,68 @@ class _AddCategoryFormState extends State<AddCategoryForm> {
               ],
             ),
           const SizedBox(height: 16.0),
-
-
           ElevatedButton(
-  onPressed: ()async {
+            onPressed: () async {
+              if (categoryNameController.text.isEmpty ||
+                  descriptionController.text.isEmpty ||
+                  _image == null ||
+                  mealControllers
+                      .any((day) => day.any((meal) => meal.text.isEmpty))) {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Error'),
+                        content: Text('Please fill all the fields'),
+                        actions: [
+                          TextButton(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              child: Text('ok'))
+                        ],
+                      );
+                    });
+                print('Please fill in all the required fields');
+                return;
+              }
 
-// Check if any of the required fields is empty
-    if (categoryNameController.text.isEmpty ||
-        descriptionController.text.isEmpty ||
-        _image == null ||
-        mealControllers.any((day) => day.any((meal) => meal.text.isEmpty))) {
-          showDialog(context: context, builder: (BuildContext context){
-            return AlertDialog(
-              title: Text('Error'),
-              content: Text('Please fill all the fields'),
-              actions: [
-                TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text('ok'))
-              ],
-            );
-          });
-      // Show an error message or handle the case where fields are empty
-      print('Please fill in all the required fields');
-      return;
-    }
-    
+              File? imageFile = _image;
 
-  //   var category = Category(
-  //     categoryName: categoryNameController.text,
-  //     description: descriptionController.text,
-  //     imagePath: _image?.path ?? '', // Assuming imagePath is a String
-  //     mealPlan: mealControllers.map((controllers) => controllers.map((controller) => controller.text).toList()).toList(),
-  //   );
+              List<List<String>> mealPlan = mealControllers
+                  .map((controllers) =>
+                      controllers.map((controller) => controller.text).toList())
+                  .toList();
 
+              await DatabaseOperations.saveCategory(
+                  categoryName: categoryNameController.text,
+                  description: descriptionController.text,
+                  image: imageFile,
+                  mealPlan: mealPlan);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Stored successfully'),
+                  backgroundColor: Colors.green,
+                ),
+              );
 
-  // print('Category Data: $category'); // Print the category data
-
-  //   var categoryBox = Hive.box<Category>('categoryBox');
-  //   categoryBox.add(category);
-  //   ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(content: Text('stored successfully'),
-  //         backgroundColor: Colors.green,),
-  //       );
-  //    print('Category added to Hive');
-  //    setState(() {
-  //      _image=null;
-  //      categoryNameController.clear();
-  //      descriptionController.clear();
-  //       mealControllers.forEach((day) => day.forEach((meal) => meal.clear()));
-  //    });
-    
-
-// Assuming _image is a File
-    File? imageFile = _image;
-
-    // Assuming mealControllers is a 2D list of TextEditingController
-    List<List<String>> mealPlan = mealControllers
-        .map((controllers) => controllers.map((controller) => controller.text).toList())
-        .toList();
-
-
-     
-  //   print('Retrieved Category Data: ${category.categoryName}');// Print a message indicating 
-  await DatabaseOperations.saveCategory(categoryName: categoryNameController.text, description: descriptionController.text, image: imageFile, mealPlan: mealPlan);
-   ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Stored successfully'),
-        backgroundColor: Colors.green,
-      ),
-    );
-
-      setState(() {
-      _image = null;
-      categoryNameController.clear();
-      descriptionController.clear();
-      mealControllers.forEach((day) => day.forEach((meal) => meal.clear()));
-    });
-  
-  },
-  child: const Text('Save Category'),
-),
-
+              setState(() {
+                _image = null;
+                categoryNameController.clear();
+                descriptionController.clear();
+                mealControllers
+                    .forEach((day) => day.forEach((meal) => meal.clear()));
+              });
+            },
+            child: const Text('Save Category'),
+          ),
           const SizedBox(height: 16.0),
           IconButton(
             onPressed: () {
-             
               Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => const LoginScreen()),
-    );
+                context,
+                MaterialPageRoute(builder: (context) => const LoginScreen()),
+              );
             },
             icon: const Icon(Icons.logout),
           ),

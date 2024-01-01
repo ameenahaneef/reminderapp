@@ -28,7 +28,7 @@ class _AddMedState extends State<AddMed> {
     super.initState();
     boxes = Hive.box<MedicineModel>('MedicineModelBox');
     historyBox = Hive.box<MedicineModel>('MedicineHistoryBox');
-    notificationsServices = NotificationsServices(); 
+    notificationsServices = NotificationsServices();
     notificationsServices.initialiseNotifications();
   }
 
@@ -216,9 +216,15 @@ class _AddMedState extends State<AddMed> {
                     spacing: 8.0,
                     children: selectedTimes.map((TimeOfDay time) {
                       return Chip(
-                        label: Text('${time.format(context)}',style: TextStyle(color: Colors.white),),
+                        label: Text(
+                          '${time.format(context)}',
+                          style: TextStyle(color: Colors.white),
+                        ),
                         backgroundColor: Colors.black,
-                        deleteIcon: Icon(Icons.cancel,color: Colors.white,),
+                        deleteIcon: Icon(
+                          Icons.cancel,
+                          color: Colors.white,
+                        ),
                         onDeleted: () {
                           setState(() {
                             selectedTimes.remove(time);

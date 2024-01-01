@@ -1,12 +1,10 @@
-
-
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:newproj/screens/navbar.dart';
 import 'package:newproj/screens/adminmodel.dart';
-import 'package:newproj/screens/userdietscreen.dart'; // Import the Category class
+import 'package:newproj/screens/userdietscreen.dart';
 
 class DietScreen extends StatelessWidget {
   const DietScreen({super.key});
@@ -37,30 +35,25 @@ class DietScreen extends StatelessWidget {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.only(left:18.0,right: 18),
+          padding: const EdgeInsets.only(left: 18.0, right: 18),
           child: GridView.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2, // You can adjust the number of columns here
+              crossAxisCount: 2,
               crossAxisSpacing: 8.0,
               mainAxisSpacing: 8.0,
-              
-             
-            
             ),
             itemCount: categories.length,
             itemBuilder: (context, index) {
               Category category = categories[index];
               return GestureDetector(
                 onTap: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (ctx){
-                    return UserScreen(selectedCategory:category);
+                  Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+                    return UserScreen(selectedCategory: category);
                   }));
-                  // Handle category tap, if needed
                 },
                 child: Card(
-                  
                   color: const Color.fromARGB(255, 189, 156, 195),
-                elevation: 2.0,
+                  elevation: 2.0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(28.0),
                   ),
@@ -70,9 +63,9 @@ class DietScreen extends StatelessWidget {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(28),
                         child: Image.file(
-                          File(category.imagePath), // Assuming imagePath is a valid file path
+                          File(category.imagePath),
                           fit: BoxFit.cover,
-                          height: 130.0, // Adjust the height as needed
+                          height: 130.0,
                         ),
                       ),
                       Padding(
@@ -80,7 +73,8 @@ class DietScreen extends StatelessWidget {
                         child: Center(
                           child: Text(
                             category.categoryName,
-                            style: TextStyle(fontSize: 16.0,fontWeight: FontWeight.bold),
+                            style: TextStyle(
+                                fontSize: 16.0, fontWeight: FontWeight.bold),
                           ),
                         ),
                       ),
