@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-//import 'package:newproj/main.dart';
 import 'package:newproj/screens/diet.dart';
-//import 'package:newproj/screens/login.dart';
 import 'package:newproj/screens/navbar.dart';
-//import 'package:shared_preferences/shared_preferences.dart';
 import 'package:newproj/screens/med.dart';
 import 'package:newproj/screens/water.dart';
 
@@ -39,14 +36,14 @@ class MainHome extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   'Worry Less\nLive Healthier',
                   style: TextStyle(
                       color: Colors.white,
                       fontSize: 20,
                       fontWeight: FontWeight.w600),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 50,
                 ),
                 GestureDetector(
@@ -83,9 +80,12 @@ class MainHome extends StatelessWidget {
                                     width: 120,
                                     height: 120,
                                   ),
-                                  Text(
-                                    'Dont forget to take\nyour medication at the\nprescribed time to maintain\nconsistent treatment',
-                                    style: TextStyle(color: Colors.white),
+                                  Padding(
+                                    padding: EdgeInsets.only(right: 20.0),
+                                    child: Text(
+                                      'Dont forget to take\nyour medication at the\nprescribed time to maintain\nconsistent treatment',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
                                   )
                                 ],
                               )),
@@ -128,9 +128,12 @@ class MainHome extends StatelessWidget {
                                     width: 120,
                                     height: 120,
                                   ),
-                                  Text(
-                                    'Remember to sip water\nthroughout the day\nto keep your body and mind \nrefreshed.',
-                                    style: TextStyle(color: Colors.white),
+                                  Padding(
+                                    padding: EdgeInsets.only(right: 16),
+                                    child: Text(
+                                      'Remember to sip water\nthroughout the day\nto keep your body and mind \nrefreshed.',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
                                   ),
                                 ],
                               )),
@@ -171,9 +174,12 @@ class MainHome extends StatelessWidget {
                                     width: 120,
                                     height: 120,
                                   ),
-                                  Text(
-                                    'Fuel your body with\nnutritious choices.\nYour health is your wealth!',
-                                    style: TextStyle(color: Colors.white),
+                                  Padding(
+                                    padding: EdgeInsets.only(right: 18.0),
+                                    child: Text(
+                                      'Fuel your body with\nnutritious choices.\nYour health is your wealth!',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
                                   ),
                                 ],
                               )),
@@ -182,7 +188,6 @@ class MainHome extends StatelessWidget {
                     ),
                   ),
                 ),
-               
               ],
             ),
           ),

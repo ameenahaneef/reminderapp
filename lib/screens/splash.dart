@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:newproj/main.dart';
 import 'package:newproj/screens/home.dart';
-//import 'package:newproj/screens/login.dart';
 import 'package:newproj/screens/mainhome.dart';
-//import 'package:newproj/screens/navbar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -64,7 +62,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> checkUserLoggedIn() async {
     final _sharedPrefs = await SharedPreferences.getInstance();
-    final _userLoggedIn = _sharedPrefs.getBool(SAVE_KEY_NAME);
+    final _userLoggedIn = _sharedPrefs.getBool(saveKeyName);
     if (_userLoggedIn == null || _userLoggedIn == false) {
       gotoLogin();
     } else {

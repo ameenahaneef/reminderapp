@@ -5,7 +5,7 @@ import 'package:newproj/screens/adminmodel.dart';
 import 'package:newproj/screens/medmodel.dart';
 import 'package:newproj/screens/model.dart';
 import 'package:newproj/screens/splash.dart';
-const SAVE_KEY_NAME = 'UserLoggedIn';
+const saveKeyName = 'UserLoggedIn';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

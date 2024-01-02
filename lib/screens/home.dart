@@ -33,7 +33,7 @@ class HomeScreen extends StatelessWidget {
                         width: 300,
                         height: 300,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 30,
                       ),
                       Container(
@@ -43,7 +43,7 @@ class HomeScreen extends StatelessWidget {
                           shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(20.0)),
                           color: Color.fromARGB(91, 104, 102, 102),
-                          child: Center(
+                          child: const Center(
                             child: Text(
                               'Prioritize your health journney with mindful reminders.Embrace each day as an oppurtunity to make positive choices for your well-being.Your wellness,Your way',
                               textAlign: TextAlign.center,
@@ -52,7 +52,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 80,
                       ),
                       ElevatedButton(

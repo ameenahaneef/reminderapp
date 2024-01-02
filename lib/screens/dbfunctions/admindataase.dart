@@ -21,7 +21,7 @@ class DatabaseOperations {
     var category = Category(
       categoryName: categoryName,
       description: description,
-      imagePath: image.path ?? '', 
+      imagePath: image.path ,
       mealPlan: mealPlan,
     );
 

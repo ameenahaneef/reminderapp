@@ -50,7 +50,7 @@ class DietDetails extends StatelessWidget {
                             meal < category.mealPlan[day].length;
                             meal++)
                           Text(
-                              '${mealTimes[meal]}: ${category.mealPlan[day][meal]}'),
+                              '${mealTimes[meal]}: ${category.mealPlan[day][meal]}',),
                         const SizedBox(height: 8.0),
                       ],
                     ),

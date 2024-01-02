@@ -235,7 +235,7 @@ class _AddMedState extends State<AddMed> {
                   ),
                   seperator,
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       if (_formKey.currentState!.validate()) {
                         if (selectedChoice.isEmpty ||
                             beforeFoodSelected == null ||
@@ -263,6 +263,14 @@ class _AddMedState extends State<AddMed> {
                           saveMedicineToHive();
                           notificationsServices.sendNotification(
                               "perfect", "Medicine saved");
+
+                          await notificationsServices
+                              .scheduleNotifications(selectedTimes.map((time) {
+                            final now = DateTime.now();
+                            return DateTime(now.year, now.month, now.day,
+                                time.hour, time.minute);
+                          }).toList());
+
 
                           Navigator.of(context)
                               .push(MaterialPageRoute(builder: (ctx) {

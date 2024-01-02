@@ -221,7 +221,7 @@ class _LoginScreenState extends State<LoginScreen> {
     if (existingUser) {
       final SharedPreferences _sharedPrefs =
           await SharedPreferences.getInstance();
-      _sharedPrefs.setBool(SAVE_KEY_NAME, true);
+      _sharedPrefs.setBool(saveKeyName, true);
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(builder: (ctx) => const MainHome()),
       );

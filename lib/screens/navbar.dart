@@ -88,7 +88,7 @@ class NavBar extends StatelessWidget {
   Future<void> logout() async {
     final SharedPreferences _sharedPrefs =
         await SharedPreferences.getInstance();
-    await _sharedPrefs.setBool(SAVE_KEY_NAME, false);
+    await _sharedPrefs.setBool(saveKeyName, false);
     print('User logged out');
   }
 }

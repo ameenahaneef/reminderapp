@@ -9,13 +9,14 @@ import 'package:newproj/screens/categorydetails.dart';
 
 class DietEdit extends StatefulWidget {
   final int selectedCategoryIndex;
-  DietEdit({Key? key, required this.selectedCategoryIndex});
+   DietEdit({Key? key,required this.selectedCategoryIndex});
 
   @override
   State<DietEdit> createState() => _DietEditState();
 }
 
 class _DietEditState extends State<DietEdit> {
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,8 +26,7 @@ class _DietEditState extends State<DietEdit> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: AddCategoryForm(
-            selectedCategoryIndex: widget.selectedCategoryIndex),
+        child: AddCategoryForm(selectedCategoryIndex:widget.selectedCategoryIndex),
       ),
     );
   }
@@ -34,11 +34,9 @@ class _DietEditState extends State<DietEdit> {
 
 class AddCategoryForm extends StatefulWidget {
   final int selectedCategoryIndex;
-  const AddCategoryForm({Key? key, required this.selectedCategoryIndex})
-      : super(key: key);
+  const AddCategoryForm({Key? key,required this.selectedCategoryIndex}):super(key: key);
   @override
-  _AddCategoryFormState createState() =>
-      _AddCategoryFormState(selectedCategoryIndex: selectedCategoryIndex);
+  _AddCategoryFormState createState() => _AddCategoryFormState(selectedCategoryIndex:selectedCategoryIndex);
 }
 
 class _AddCategoryFormState extends State<AddCategoryForm> {
@@ -62,7 +60,7 @@ class _AddCategoryFormState extends State<AddCategoryForm> {
   final List<List<TextEditingController>> mealControllers = List.generate(
     7,
     (index) => List.generate(
-      3, // 3 meals per day
+      3, 
       (index) => TextEditingController(),
     ),
   );
@@ -78,8 +76,8 @@ class _AddCategoryFormState extends State<AddCategoryForm> {
   Future<void> fetchStoredData() async {
     var categoryBox = await Hive.openBox<Category>('categoryBox');
 
-    if (categoryBox.isNotEmpty && categoryBox.length > selectedCategoryIndex) {
-      print('Fetching data for index: $selectedCategoryIndex');
+    if (categoryBox.isNotEmpty&&categoryBox.length>selectedCategoryIndex) {
+       print('Fetching data for index: $selectedCategoryIndex');
       var existingCategory = categoryBox.getAt(selectedCategoryIndex);
       if (existingCategory != null) {
         setState(() {
@@ -168,8 +166,8 @@ class _AddCategoryFormState extends State<AddCategoryForm> {
   Future<void> saveChanges() async {
     var categoryBox = await Hive.openBox<Category>('categoryBox');
 
-    if (categoryBox.isNotEmpty && categoryBox.length > selectedCategoryIndex) {
-      print('Saving changes for index: $selectedCategoryIndex');
+    if (categoryBox.isNotEmpty&&categoryBox.length>selectedCategoryIndex) {
+       print('Saving changes for index: $selectedCategoryIndex');
       var existingCategory = categoryBox.getAt(selectedCategoryIndex);
       if (existingCategory != null) {
         var updatedCategory = Category(
@@ -189,10 +187,8 @@ class _AddCategoryFormState extends State<AddCategoryForm> {
         }));
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Changes saved successfully'),
-            backgroundColor: Colors.green,
-          ),
+          SnackBar(content: Text('Changes saved successfully'),
+          backgroundColor: Colors.green,),
         );
       }
     }

@@ -32,31 +32,14 @@ class WaterScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Are you drinking enough water',
-                  style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontStyle: FontStyle.italic),
-                ),
-                Text('Benefits of drinking Water',
-                 style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontStyle: FontStyle.italic),),
-                      Text('* Lubricates the joints',style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontStyle: FontStyle.italic),),
-                      Text('* Boosts skin health and beauty',style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                      fontStyle: FontStyle.italic),)
-              
+                Row(children: [
+                  Column(
+                    children: [
+                      Text('')
+                    ],
+                  )
+                ],)
+                
               ],
             ),
           ),

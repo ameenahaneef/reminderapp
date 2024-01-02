@@ -42,7 +42,7 @@ class UserScreen extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 16,
                 ),
                 Text(
@@ -64,7 +64,7 @@ class UserScreen extends StatelessWidget {
                         style: TextStyle(color: Colors.black, fontSize: 16),
                       ),
                     )),
-                Center(
+                const Center(
                     child: Text(
                   'Meal Plan:',
                   style: TextStyle(
@@ -79,8 +79,8 @@ class UserScreen extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      color: Color.fromARGB(255, 220, 210, 223),
-                      margin: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+                      color: const Color.fromARGB(255, 220, 210, 223),
+                      margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 18),
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Column(
@@ -88,10 +88,10 @@ class UserScreen extends StatelessWidget {
                           children: [
                             Text(
                               'Day ${day + 1}',
-                              style: TextStyle(
+                              style: const TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 8,
                             ),
                             for (int meal = 0;
@@ -100,11 +100,11 @@ class UserScreen extends StatelessWidget {
                               ListTile(
                                 title: Text(
                                   mealTimes[meal],
-                                  style: TextStyle(fontSize: 16),
+                                  style: const TextStyle(fontSize: 18,color: Colors.black,fontWeight: FontWeight.w500),
                                 ),
                                 subtitle: Text(
                                   selectedCategory.mealPlan[day][meal],
-                                  style: TextStyle(fontSize: 16),
+                                  style: const TextStyle(fontSize: 16,color: Colors.black),
                                 ),
                               ),
                             const SizedBox(height: 8.0),

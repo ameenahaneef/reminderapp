@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:intl/intl.dart';
 import 'package:newproj/screens/dailydose.dart';
 import 'package:newproj/screens/dbfunctions/meddatabase.dart';
 import 'package:newproj/screens/editmed.dart';
@@ -170,9 +169,5 @@ class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
             )));
   }
 
-  String _formatDates(List<DateTime> dates) {
-    final formattedDates =
-        dates.map((date) => DateFormat('yyyy-MM-dd').format(date)).toList();
-    return formattedDates.join(", ");
-  }
+  
 }

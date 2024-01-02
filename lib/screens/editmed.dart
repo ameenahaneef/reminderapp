@@ -243,7 +243,6 @@ class _EditMedState extends State<EditMed> {
                           style: TextStyle(color: Colors.white),
                         ),
                         backgroundColor: Colors.black,
-                        
                         deleteIconColor: Colors.white,
                         onDeleted: () {
                           setState(() {

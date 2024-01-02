@@ -52,7 +52,7 @@ class NotificationsServices {
       notificationDetails,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
-      //androidAllowWhileIdle: true,
+     
     );
   }
 }

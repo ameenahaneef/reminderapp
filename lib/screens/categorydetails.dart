@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:newproj/screens/dietdetails.dart';
@@ -17,8 +16,8 @@ class _CategoryDisplayState extends State<CategoryDisplay> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 127, 65, 138),
-        title: Text('Diet Display'),
+        backgroundColor: const Color.fromARGB(255, 127, 65, 138),
+        title: const Text('Diet Display'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(30.0),
@@ -31,12 +30,12 @@ class _CategoryDisplayState extends State<CategoryDisplay> {
               child: Container(
                 width: 200,
                 height: 80,
-                color: Color.fromARGB(255, 127, 65, 138),
+                color: const Color.fromARGB(255, 127, 65, 138),
                 child: Center(
                   child: ListTile(
                     title: Text(
                       category.categoryName,
-                      style: TextStyle(color: Colors.white),
+                      style: const TextStyle(color: Colors.white),
                     ),
                     leading: ClipOval(
                       child: Image.file(
@@ -73,15 +72,15 @@ class _CategoryDisplayState extends State<CategoryDisplay> {
                                   context: context,
                                   builder: (BuildContext context) {
                                     return AlertDialog(
-                                      title: Text('Delete Category'),
-                                      content: Text(
+                                      title: const Text('Delete Category'),
+                                      content: const Text(
                                           'Are you sure you want to delete this category?'),
                                       actions: [
                                         TextButton(
                                           onPressed: () {
                                             Navigator.of(context).pop();
                                           },
-                                          child: Text('cancel'),
+                                          child: const Text('cancel'),
                                         ),
                                         TextButton(
                                           onPressed: () {
