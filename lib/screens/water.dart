@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:newproj/screens/navbar.dart';
 import 'package:newproj/screens/style.dart';
+import 'package:newproj/screens/watertrack.dart';
 
 class WaterScreen extends StatelessWidget {
   const WaterScreen({super.key});
@@ -147,8 +148,12 @@ class WaterScreen extends StatelessWidget {
  
                       ],
                     ),
-                    SizedBox(height: 10,),
-                    ElevatedButton(onPressed: (){}, style: ElevatedButton.styleFrom(backgroundColor: Colors.black,),
+                   const SizedBox(height: 10,),
+                    ElevatedButton(onPressed: (){
+                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx){
+                        return WaterTrack();
+                      }));
+                    }, style: ElevatedButton.styleFrom(backgroundColor: Colors.black,),
                     
                     child: const Padding(
                       padding: EdgeInsets.all(8.0),

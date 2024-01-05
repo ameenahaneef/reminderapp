@@ -5,7 +5,7 @@ import 'package:newproj/screens/dbfunctions/meddatabase.dart';
 import 'package:newproj/screens/medmodel.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:newproj/screens/notiservice.dart';
+import 'package:newproj/screens/notinoti.dart';
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -20,7 +20,6 @@ class AddMed extends StatefulWidget {
 class _AddMedState extends State<AddMed> {
   late Box boxes;
   late Box historyBox;
-  late NotificationsServices notificationsServices;
   bool? beforeFoodSelected;
   bool? afterFoodSelected;
   @override
@@ -28,8 +27,6 @@ class _AddMedState extends State<AddMed> {
     super.initState();
     boxes = Hive.box<MedicineModel>('MedicineModelBox');
     historyBox = Hive.box<MedicineModel>('MedicineHistoryBox');
-    notificationsServices = NotificationsServices();
-    notificationsServices.initialiseNotifications();
   }
 
   Widget seperator = const SizedBox(
@@ -261,16 +258,7 @@ class _AddMedState extends State<AddMed> {
                           );
                         } else {
                           saveMedicineToHive();
-                          notificationsServices.sendNotification(
-                              "perfect", "Medicine saved");
-
-                          await notificationsServices
-                              .scheduleNotifications(selectedTimes.map((time) {
-                            final now = DateTime.now();
-                            return DateTime(now.year, now.month, now.day,
-                                time.hour, time.minute);
-                          }).toList());
-
+                        LocalNotifications.showSimpleNotifications(title: 'medicine save', body: 'we will track', payload: 'this is your medicine');
 
                           Navigator.of(context)
                               .push(MaterialPageRoute(builder: (ctx) {

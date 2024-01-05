@@ -21,7 +21,6 @@ class EditMed extends StatefulWidget {
 class _EditMedState extends State<EditMed> {
   late Box boxes;
   late Box historyBox;
-  late NotificationsServices notificationsServices;
   bool? beforeFoodSelected;
   bool? afterFoodSelected;
   final nameController = TextEditingController();
@@ -34,8 +33,6 @@ class _EditMedState extends State<EditMed> {
     super.initState();
     boxes = Hive.box<MedicineModel>('MedicineModelBox');
     historyBox = Hive.box<MedicineModel>('MedicineHistoryBox');
-    notificationsServices = NotificationsServices();
-    notificationsServices.initialiseNotifications();
     nameController.text = widget.medicine.name;
     doseController.text = widget.medicine.dosage;
     desController.text = widget.medicine.description;
@@ -257,13 +254,7 @@ class _EditMedState extends State<EditMed> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         saveUpdatedData();
-                        notificationsServices.sendNotification(
-                            "welldone", "changes saved successfully");
-
-                        Navigator.of(context)
-                            .push(MaterialPageRoute(builder: (ctx) {
-                          return DailyDose();
-                        }));
+                        
                       }
                     },
                     style:
