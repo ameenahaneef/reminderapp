@@ -67,6 +67,7 @@ class WaterScreen extends StatelessWidget {
       drawer: const NavBar(),
       body: Container(
         width: double.infinity,
+       height: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
@@ -123,49 +124,47 @@ class WaterScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              Container(
-                child: Column(
-                  children: [
-                    buildText(
-                        'Water is the major\ncomponent of most\nbody parts'),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              Column(
+                children: [
+                  buildText(
+                      'Water is the major\ncomponent of most\nbody parts'),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                     buildImageContainer('assets/images/[removal.ai]_39505237-d1c4-4812-8fbb-29da30717555-hhup_edt6_220113.png','Kidney', '79%'),
+                     buildImageContainer('assets/images/[removal.ai]_23c86a64-747b-4fb5-8a0c-37efa66e7e55-oq6c_oqju_160610.png','Liver', '73%'),
+                     buildImageContainer('assets/images/[removal.ai]_df0c5e36-04ff-4d38-81c6-ed3f51e6d505-red-lungs-with-white-background-word-heart-it_1308-153031.png','Lungs', '83%'),
+                     buildImageContainer('assets/images/[removal.ai]_de8b03ad-8237-4b3e-b4c8-3874019b4ae3-blood_08.png','Blood', '51%'),
+              
+                    ],
+                  ),SizedBox(height: 4,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                                            buildImageContainer('assets/images/[removal.ai]_5bbca2bd-5f2e-4625-b77e-44fd3f5db9bb-9jp9_31fq_160622.png','Bones', '31%'),
+                     buildImageContainer('assets/images/[removal.ai]_b3eede8f-9dbd-43b5-8214-cd03ff69c2e9-36el_uzef_160616.png','Brain', '73%'),
+                     buildImageContainer('assets/images/[removal.ai]_eaeb350f-3c8b-4239-b46c-32c1b9e150ee-nmwy_e2e9_220113.png','Stomach', '40%'),
+                     buildImageContainer('assets/images/[removal.ai]_f615a221-ce10-4f99-a081-bf00e6da5a03-human-internal-organ-with-intestine_1308-108352.png','Intestine', '50%'),
+               
+                    ],
+                  ),
+                 const SizedBox(height: 10,),
+                  ElevatedButton(onPressed: (){
+                    Navigator.of(context).push(MaterialPageRoute(builder: (ctx){
+                      return WaterTrack();
+                    }));
+                  }, style: ElevatedButton.styleFrom(backgroundColor: Colors.black,),
+                  
+                  child: const Padding(
+                    padding: EdgeInsets.all(8.0),
+                    child: Column(
                       children: [
-                       buildImageContainer('assets/images/[removal.ai]_39505237-d1c4-4812-8fbb-29da30717555-hhup_edt6_220113.png','Kidney', '79%'),
-                       buildImageContainer('assets/images/[removal.ai]_23c86a64-747b-4fb5-8a0c-37efa66e7e55-oq6c_oqju_160610.png','Liver', '73%'),
-                       buildImageContainer('assets/images/[removal.ai]_df0c5e36-04ff-4d38-81c6-ed3f51e6d505-red-lungs-with-white-background-word-heart-it_1308-153031.png','Lungs', '83%'),
-                       buildImageContainer('assets/images/[removal.ai]_de8b03ad-8237-4b3e-b4c8-3874019b4ae3-blood_08.png','Blood', '51%'),
-
-                      ],
-                    ),SizedBox(height: 4,),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                                              buildImageContainer('assets/images/[removal.ai]_5bbca2bd-5f2e-4625-b77e-44fd3f5db9bb-9jp9_31fq_160622.png','Bones', '31%'),
-                       buildImageContainer('assets/images/[removal.ai]_b3eede8f-9dbd-43b5-8214-cd03ff69c2e9-36el_uzef_160616.png','Brain', '73%'),
-                       buildImageContainer('assets/images/[removal.ai]_eaeb350f-3c8b-4239-b46c-32c1b9e150ee-nmwy_e2e9_220113.png','Stomach', '40%'),
-                       buildImageContainer('assets/images/[removal.ai]_f615a221-ce10-4f99-a081-bf00e6da5a03-human-internal-organ-with-intestine_1308-108352.png','Intestine', '50%'),
- 
+                        Text('Go Ahead'),
+                        Icon(Icons.arrow_forward_ios_rounded),
                       ],
                     ),
-                   const SizedBox(height: 10,),
-                    ElevatedButton(onPressed: (){
-                      Navigator.of(context).push(MaterialPageRoute(builder: (ctx){
-                        return WaterTrack();
-                      }));
-                    }, style: ElevatedButton.styleFrom(backgroundColor: Colors.black,),
-                    
-                    child: const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          Text('Go Ahead'),
-                          Icon(Icons.arrow_forward_ios_rounded),
-                        ],
-                      ),
-                    ))
-                  ],
-                ),
+                  ))
+                ],
               )
             ],
           ),

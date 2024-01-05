@@ -140,9 +140,33 @@ static Future showScheduleNotifications({
     
   }
 
+// to give a notification at userpicked time
+ static Future scheduleNotification(
+      {required
+      String title,
+    required  String body,
+    required  String payLoad,
+      required DateTime scheduledNotificationDateTime,
+      required int id,
+      }) async {
+            tz.initializeTimeZones();
+
+    return _flutterLocalNotificationsPlugin.zonedSchedule(
+        5,
+        title,
+        body,
+        tz.TZDateTime.from(
+          scheduledNotificationDateTime,
+          tz.local,
+        ),
+        const NotificationDetails(android: AndroidNotificationDetails('channel 6', 'your channel Name',channelDescription: 'your channel description',
+    importance: Importance.max,priority: Priority.high,ticker: 'ticker')),
+         androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+     uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime);
+  }
 
 
 
 
- 
+  
 }

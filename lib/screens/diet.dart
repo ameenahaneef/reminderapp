@@ -84,7 +84,9 @@ class DietScreen extends StatelessWidget {
               );
             },
           ),
+        
         ),
+        
       ),
     );
   }

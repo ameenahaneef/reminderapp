@@ -258,15 +258,18 @@ class _AddMedState extends State<AddMed> {
                           );
                         } else {
                           saveMedicineToHive();
-                        LocalNotifications.showSimpleNotifications(title: 'medicine save', body: 'we will track', payload: 'this is your medicine');
-
-                          Navigator.of(context)
+                  LocalNotifications.showSimpleNotifications(title: 'medicine save', body: 'we will track', payload: 'this is your medicine');
+                   Navigator.of(context)
                               .push(MaterialPageRoute(builder: (ctx) {
                             return DailyDose();
                           }));
                         }
-                      }
-                    },
+                    }
+                  },
+                  
+
+
+
                     style:
                         ElevatedButton.styleFrom(backgroundColor: Colors.white),
                     child: const Text(
@@ -305,9 +308,34 @@ class _AddMedState extends State<AddMed> {
       context: context,
       initialTime: TimeOfDay.now(),
     );
+if(selectedTime!=null){
 
     setState(() {
-      selectedTimes.add(selectedTime!);
+      selectedTimes.add(selectedTime);
     });
+ int baseNotificationId = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+    selectedTimes.asMap().forEach((index, time) async {
+      int notificationId = baseNotificationId + index;
+    DateTime notificationTime = DateTime.now();
+    notificationTime = DateTime(
+      notificationTime.year,
+      notificationTime.month,
+      notificationTime.day,
+      time.hour,
+     time.minute,
+    );
+
+    LocalNotifications.scheduleNotification(
+      title: 'this is scheduled',
+      body: 'noti at time',
+      payLoad: 'noti at time',
+      scheduledNotificationDateTime: notificationTime,
+      id:notificationId,
+    );
   }
+);}
+  }
+
+
 }
+
