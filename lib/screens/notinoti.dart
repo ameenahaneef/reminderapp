@@ -34,12 +34,14 @@ static Future showSimpleNotifications({
         channelDescription: 'your channel description',
         importance: Importance.max,
         priority: Priority.high,
-        ticker: 'ticker');
+        ticker: 'ticker',
+        );
 const NotificationDetails notificationDetails =
     NotificationDetails(android: androidNotificationDetails);
 await _flutterLocalNotificationsPlugin.show(
     0, title,body, notificationDetails,
     payload: payload);
+
 
 }
 
@@ -152,7 +154,7 @@ static Future showScheduleNotifications({
             tz.initializeTimeZones();
 
     return _flutterLocalNotificationsPlugin.zonedSchedule(
-        5,
+      id,
         title,
         body,
         tz.TZDateTime.from(
@@ -160,7 +162,10 @@ static Future showScheduleNotifications({
           tz.local,
         ),
         const NotificationDetails(android: AndroidNotificationDetails('channel 6', 'your channel Name',channelDescription: 'your channel description',
-    importance: Importance.max,priority: Priority.high,ticker: 'ticker')),
+    importance: Importance.max,priority: Priority.high,ticker: 'ticker',
+    //playSound: true,
+    //sound: RawResourceAndroidNotificationSound('alarm-20025')
+    )),
          androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
      uiLocalNotificationDateInterpretation: UILocalNotificationDateInterpretation.absoluteTime);
   }

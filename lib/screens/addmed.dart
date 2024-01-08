@@ -6,6 +6,9 @@ import 'package:newproj/screens/medmodel.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:newproj/screens/notinoti.dart';
+import 'package:timezone/data/latest.dart' as tz;
+import 'package:timezone/timezone.dart' as tz;
+
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -209,26 +212,33 @@ class _AddMedState extends State<AddMed> {
                     ),
                   ),
                   seperator,
-                  Wrap(
-                    spacing: 8.0,
-                    children: selectedTimes.map((TimeOfDay time) {
-                      return Chip(
-                        label: Text(
-                          '${time.format(context)}',
-                          style: TextStyle(color: Colors.white),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        Wrap(
+                          spacing: 8.0,
+                          children: selectedTimes.map((TimeOfDay time) {
+                            return Chip(
+                              label: Text(
+                                '${time.format(context)}',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              backgroundColor: Colors.black,
+                              deleteIcon: const Icon(
+                                Icons.cancel,
+                                color: Colors.white,
+                              ),
+                              onDeleted: () {
+                                setState(() {
+                                  selectedTimes.remove(time);
+                                });
+                              },
+                            );
+                          }).toList(),
                         ),
-                        backgroundColor: Colors.black,
-                        deleteIcon: Icon(
-                          Icons.cancel,
-                          color: Colors.white,
-                        ),
-                        onDeleted: () {
-                          setState(() {
-                            selectedTimes.remove(time);
-                          });
-                        },
-                      );
-                    }).toList(),
+                      ],
+                    ),
                   ),
                   seperator,
                   ElevatedButton(
@@ -261,7 +271,7 @@ class _AddMedState extends State<AddMed> {
                   LocalNotifications.showSimpleNotifications(title: 'medicine save', body: 'we will track', payload: 'this is your medicine');
                    Navigator.of(context)
                               .push(MaterialPageRoute(builder: (ctx) {
-                            return DailyDose();
+                            return const DailyDose();
                           }));
                         }
                     }
@@ -293,14 +303,27 @@ class _AddMedState extends State<AddMed> {
     } else if (afterFoodSelected != null && afterFoodSelected!) {
       beforeOrAfter = 'After Food';
     }
+
+//  List<String> formattedTimes = selectedTimes.map((time) {
+//     String hour = time.hour.toString();
+//     String minute = time.minute < 10 ? '0${time.minute}' : time.minute.toString();
+//     return '$hour.$minute';
+//   }).toList();
+ // Convert TimeOfDay objects to a formatted string with AM/PM
+  List<String> formattedTimes = selectedTimes.map((time) {
+    String period = time.period == DayPeriod.am ? 'AM' : 'PM';
+    return '${time.hourOfPeriod}:${time.minute} $period';
+  }).toList();
+
+
     await DatabaseHelper().saveMedicineToHive(
         name: nameController.text,
         dosage: doseController.text,
         description: desController.text,
         type: selectedChoice,
         beforeOrAfter: beforeOrAfter,
-        selectedTimes:
-            selectedTimes.map((time) => time.format(context)).toList());
+        selectedTimes:formattedTimes);
+            // selectedTimes.map((time) => time.format(context)).toList());
   }
 
   Future<void> _selectTime(BuildContext context) async {
@@ -309,9 +332,11 @@ class _AddMedState extends State<AddMed> {
       initialTime: TimeOfDay.now(),
     );
 if(selectedTime!=null){
+  
+
 
     setState(() {
-      selectedTimes.add(selectedTime);
+       selectedTimes.add(selectedTime);
     });
  int baseNotificationId = DateTime.now().millisecondsSinceEpoch ~/ 1000;
     selectedTimes.asMap().forEach((index, time) async {
@@ -325,17 +350,23 @@ if(selectedTime!=null){
      time.minute,
     );
 
+ String medicineName = nameController.text; // Get medicine name
+      String dosage = doseController.text; // Get dosage
+
+String bodyy='Medicine:$medicineName,Dosage:$dosage';
     LocalNotifications.scheduleNotification(
-      title: 'this is scheduled',
-      body: 'noti at time',
+      title: 'Hey,its time to take your medicine',
+      body: bodyy,
       payLoad: 'noti at time',
       scheduledNotificationDateTime: notificationTime,
       id:notificationId,
     );
-  }
-);}
-  }
 
 
+
+     
+    });
+  }
 }
+  }
 

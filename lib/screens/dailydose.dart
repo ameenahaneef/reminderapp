@@ -4,6 +4,7 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:newproj/screens/med.dart';
 import 'package:newproj/screens/meddetailsscreen.dart';
 import 'package:newproj/screens/medmodel.dart';
+import 'package:newproj/screens/navbar.dart';
 
 class DailyDose extends StatefulWidget {
   const DailyDose({super.key});
@@ -26,29 +27,30 @@ class _DailyDoseState extends State<DailyDose> {
     medicineBox = Hive.box<MedicineModel>('MedicineModelBox');
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+       backgroundColor: Color.fromARGB(255, 116, 74, 129),
         elevation: 0.0,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => Medicine()),
-                (route) => false);
-          },
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.black,
-          ),
-        ),
-        title: Text(
+        // leading: IconButton(
+        //   onPressed: () {
+        //     Navigator.pushAndRemoveUntil(
+        //         context,
+        //         MaterialPageRoute(builder: (context) => Medicine()),
+        //         (route) => false);
+        //   },
+        //   icon: const Icon(
+        //     Icons.arrow_back,
+        //     color: Colors.black,
+        //   ),
+        // ),
+        title: const Text(
           'Welcome to daily doses',
           style: TextStyle(
-              color: Colors.black,
+              color: Colors.white,
               fontStyle: FontStyle.italic,
               fontWeight: FontWeight.w600,
               fontSize: 20),
         ),
       ),
+      drawer: const NavBar(),
       body: Container(
         width: double.infinity,
         decoration: const BoxDecoration(
@@ -95,12 +97,12 @@ class _DailyDoseState extends State<DailyDose> {
             return AddMed();
           }));
         },
+        backgroundColor:  Color.fromARGB(255, 116, 74, 129),
+        foregroundColor: Colors.white,
         child: Text(
           '+',
-          style: TextStyle(fontSize: 20),
+          style: TextStyle(fontSize: 30),
         ),
-        backgroundColor: Color.fromARGB(255, 116, 74, 129),
-        foregroundColor: Colors.white,
       ),
     );
   }

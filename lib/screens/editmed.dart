@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:newproj/screens/dailydose.dart';
 import 'package:newproj/screens/dbfunctions/meddatabase.dart';
+import 'package:newproj/screens/meddetailsscreen.dart';
 import 'package:newproj/screens/medmodel.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:newproj/screens/notinoti.dart';
 import 'package:newproj/screens/notiservice.dart';
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
@@ -213,9 +215,11 @@ class _EditMedState extends State<EditMed> {
                         initialTime: TimeOfDay.now(),
                       );
                       if (pickedTime != null) {
+                        String period = pickedTime.hour >= 12 ? 'PM' : 'AM';
+    int hour = pickedTime.hourOfPeriod == 0 ? 12 : pickedTime.hourOfPeriod;
                         setState(() {
                           selectedTimes
-                              .add('${pickedTime.hour}:${pickedTime.minute}');
+                              .add('$hour:${pickedTime.minute}$period');
                         });
                       }
                     },
@@ -231,23 +235,30 @@ class _EditMedState extends State<EditMed> {
                     ),
                   ),
                   seperator,
-                  Wrap(
-                    spacing: 8.0,
-                    children: selectedTimes.map((String time) {
-                      return Chip(
-                        label: Text(
-                          time,
-                          style: TextStyle(color: Colors.white),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        Wrap(
+                          spacing: 8.0,
+                          children: selectedTimes.map((String time) {
+                            return Chip(
+                              label: Text(
+                                time,
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              backgroundColor: Colors.black,
+                              deleteIconColor: Colors.white,
+                              onDeleted: () {
+                                setState(() {
+                                  selectedTimes.remove(time);
+                                });
+                              },
+                            );
+                          }).toList(),
                         ),
-                        backgroundColor: Colors.black,
-                        deleteIconColor: Colors.white,
-                        onDeleted: () {
-                          setState(() {
-                            selectedTimes.remove(time);
-                          });
-                        },
-                      );
-                    }).toList(),
+                      ],
+                    ),
                   ),
                   seperator,
                   ElevatedButton(
@@ -284,5 +295,42 @@ class _EditMedState extends State<EditMed> {
         selectedTimes: selectedTimes);
 
     DatabaseHelper().updateMedicine(widget.medicine, updatedMedicine);
+    
+    LocalNotifications.cancelAll();
+  int idCounter = 1; 
+
+  for (String time in selectedTimes) {
+    List<String> parts = time.split(':');
+    int hour = int.parse(parts[0]);
+    int minute = int.parse(parts[1].substring(0, 2));
+    String period = parts[1].substring(2);
+
+    if (period == 'PM' && hour != 12) {
+      hour += 12;
+    }
+
+    DateTime scheduledNotificationDateTime = DateTime(
+      DateTime.now().year,
+      DateTime.now().month,
+      DateTime.now().day,
+      hour,
+      minute,
+    );
+
+    int id = idCounter++; 
+    LocalNotifications.scheduleNotification(
+      title: 'Medicine Reminder',
+      body: 'Take your medicine: ${updatedMedicine.name},${updatedMedicine.dosage}',
+      payLoad: 'medicine_reminder',
+      scheduledNotificationDateTime: scheduledNotificationDateTime,
+      id: id,
+    );
+  }
+
+
+
+    Navigator.of(context).push(MaterialPageRoute(builder: (ctx){
+      return MedicineDetailsScreen(medicine:updatedMedicine);
+    }));
   }
 }

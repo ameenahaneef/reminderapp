@@ -46,7 +46,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             Expanded(
               child: ListView.separated(
                 itemCount: medicineHistoryBox.length,
-                separatorBuilder: (context, index) => Divider(
+                separatorBuilder: (context, index) => const Divider(
                   thickness: 2,
                   color: Colors.white,
                 ),
@@ -59,11 +59,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       children: [
                         Text(
                           'medicine name:${medicine.name}',
-                          style: TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Colors.white),
                         ),
                         Text(
                           'Dosage:${medicine.dosage}',
-                          style: TextStyle(color: Colors.white),
+                          style: const TextStyle(color: Colors.white),
                         ),
                       ],
                     ),
@@ -73,7 +73,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             medicineHistoryBox.deleteAt(index);
                           });
                         },
-                        icon: Icon(
+                        icon: const Icon(
                           Icons.delete,
                           color: Colors.white,
                         )),

@@ -38,13 +38,23 @@ class DatabaseHelper {
     print('Times: $selectedTimes');
   }
 
+  // void updateMedicine(MedicineModel oldMedicine, MedicineModel newMedicine) {
+  //   int index =
+  //       boxes.values.toList().indexWhere((medicine) => medicine == oldMedicine);
+  //   if (index != -1) {
+  //     boxes.putAt(index, newMedicine);
+  //   }
+  // }
   void updateMedicine(MedicineModel oldMedicine, MedicineModel newMedicine) {
-    int index =
-        boxes.values.toList().indexWhere((medicine) => medicine == oldMedicine);
-    if (index != -1) {
-      boxes.putAt(index, newMedicine);
+  for (int i = 0; i < boxes.length; i++) {
+    MedicineModel medicine = boxes.getAt(i)!;
+    if (medicine.name == oldMedicine.name) {
+      boxes.putAt(i, newMedicine);
+      break; // Stop iterating once the medicine is updated
     }
   }
+}
+
 
   Future<void> deleteMedicine(MedicineModel medicine) async {
     final index = boxes.values.toList().indexOf(medicine);

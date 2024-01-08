@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:newproj/screens/dailydose.dart';
 import 'package:newproj/screens/mainhome.dart';
+import 'package:newproj/screens/navbar.dart';
 
 class Medicine extends StatelessWidget {
   const Medicine({super.key});
@@ -8,10 +9,12 @@ class Medicine extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       appBar: AppBar(backgroundColor:  const Color.fromARGB(255, 116, 74, 129),elevation: 0.0,leading: IconButton(onPressed: (){
-        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>MainHome()), (route) => false);
-      }, icon: const Icon(Icons.arrow_back)),),
-      
+       appBar: AppBar(backgroundColor:  const Color.fromARGB(255, 116, 74, 129),elevation: 0.0,
+      //  leading: IconButton(onPressed: (){
+      //   Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context)=>MainHome()), (route) => false);
+      // }, icon: const Icon(Icons.arrow_back)),
+      ),
+      drawer: const NavBar(),
       body: Container(
         width: double.infinity,
         height: double.infinity,
