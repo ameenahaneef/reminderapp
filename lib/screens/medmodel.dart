@@ -13,7 +13,7 @@ class MedicineModel {
   @HiveField(4)
   String beforeOrAfter;
   @HiveField(5)
-  List<String> selectedTimes;
+  List<dynamic> selectedTimes;
 
   MedicineModel(
       {required this.name,

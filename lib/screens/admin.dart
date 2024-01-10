@@ -19,7 +19,6 @@ class _AdminScreenState extends State<AdminScreen> {
       padding: const EdgeInsets.all(40.0),
       child: Form(
         key: _formKey,
-        // autovalidateMode: AutovalidateMode.always,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -28,7 +27,7 @@ class _AdminScreenState extends State<AdminScreen> {
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Colors.white)),
+                    borderSide: const BorderSide(color: Colors.white)),
                 labelText: 'Username',
               ),
               validator: (value) {
@@ -38,7 +37,7 @@ class _AdminScreenState extends State<AdminScreen> {
                 return null;
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             TextFormField(
@@ -46,7 +45,7 @@ class _AdminScreenState extends State<AdminScreen> {
               decoration: InputDecoration(
                 border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(color: Colors.white)),
+                    borderSide: const BorderSide(color: Colors.white)),
                 labelText: 'Password',
               ),
               validator: (value) {
@@ -56,7 +55,7 @@ class _AdminScreenState extends State<AdminScreen> {
                 return null;
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 20,
             ),
             ElevatedButton(
@@ -67,7 +66,7 @@ class _AdminScreenState extends State<AdminScreen> {
                     passController.clear();
                   }
                 },
-                child: Text('Login'))
+                child: const Text('Login'))
           ],
         ),
       ),
@@ -87,14 +86,14 @@ class _AdminScreenState extends State<AdminScreen> {
           context: context,
           builder: (ctx) {
             return AlertDialog(
-              title: Text('error'),
-              content: Text('invalid username and password'),
+              title: const Text('error'),
+              content: const Text('invalid username and password'),
               actions: [
                 TextButton(
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    child: Text('ok'))
+                    child: const Text('ok'))
               ],
             );
           });

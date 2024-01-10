@@ -6,7 +6,6 @@ import 'package:newproj/screens/style.dart';
 import 'package:newproj/screens/waterhistory.dart';
 import 'package:newproj/screens/watermodel.dart';
 
-
 class WaterTrack extends StatefulWidget {
   const WaterTrack({Key? key}) : super(key: key);
 
@@ -23,14 +22,14 @@ class _WaterTrackState extends State<WaterTrack> {
   String selectedReminderFrequency = 'every minute';
   bool isReminderSet = false;
 
-
-   @override
+  @override
   void initState() {
     super.initState();
     _loadConsumptionData();
     _loadReminderData();
   }
-Future<void> _loadReminderData() async {
+
+  Future<void> _loadReminderData() async {
     final box = await Hive.openBox<String>('reminder_data');
     final reminderFrequency = box.get('reminderFrequency');
 
@@ -41,7 +40,6 @@ Future<void> _loadReminderData() async {
       });
     }
   }
-  
 
   Future<void> _loadConsumptionData() async {
     final box = await Hive.openBox<ConsumptionData>('consumption_data');
@@ -56,24 +54,16 @@ Future<void> _loadReminderData() async {
   }
 
   Future<void> _updateConsumedAmount(int amount) async {
-      DateTime today=DateTime.now();
 
-    if(today.difference(lastConsumptionDate).inDays>0){
-      setState(() {
-        consumedAmount=0;
-        lastConsumptionDate=today;
-      });
-    }
-    
     if (selectedQuantity > 0) {
       setState(() {
-        consumedAmount += amount;
+        consumedAmount += selectedQuantity;
         showChoiceChips = false;
         selectedQuantity = 0;
       });
       if (DateTime.now().difference(lastConsumptionDate).inDays > 0) {
         setState(() {
-          consumedAmount = 0;
+          consumedAmount = selectedQuantity;
           lastConsumptionDate = DateTime.now();
         });
       }
@@ -86,20 +76,25 @@ Future<void> _loadReminderData() async {
           builder: (BuildContext context) {
             return AlertDialog(
               title: const Text('Alert'),
-              content:
-                  const Text('Please select a quantity before updating consumption'),
+              content: const Text(
+                  'Please select a quantity before updating consumption'),
               actions: [
                 TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text('OK'))
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
               ],
             );
           });
+      return;
     }
-    final consumptionData=ConsumptionData(consumedDay: DateTime.now(), consumedAmount: consumedAmount,reminderInterval:selectedReminderFrequency);
-    final box=await Hive.openBox<ConsumptionData>('consumption_data');
+    final consumptionData = ConsumptionData(
+        consumedDay: DateTime.now(),
+        consumedAmount: consumedAmount,
+        reminderInterval: selectedReminderFrequency);
+    final box = await Hive.openBox<ConsumptionData>('consumption_data');
     box.add(consumptionData);
     print('added');
   }
@@ -154,11 +149,11 @@ Future<void> _loadReminderData() async {
                   onTap: () {
                     _updateReminderFrequency('Every Minute');
                     LocalNotifications.showSimpleNotifications(
-                        title: 'succes',
+                        title: 'success',
                         body: 'Alarm set',
                         payload: 'watching you');
                     LocalNotifications.showPeriodicNNotifications(
-                        title: 'every minute',
+                        title: 'Drink Water',
                         body: 'this is every minute notification',
                         payload: 'This is periodic data');
                   },
@@ -168,27 +163,26 @@ Future<void> _loadReminderData() async {
                   onTap: () {
                     _updateReminderFrequency('Every five minutes');
                     LocalNotifications.showSimpleNotifications(
-                        title: 'succes',
+                        title: 'success',
                         body: 'Alarm set',
                         payload: 'watching you');
 
                     LocalNotifications.showScheduleNotifications(
-                        title: 'schedule notification',
-                        body: 'this is noti after 5 mins',
+                        title: 'Drink Water',
+                        body: 'this schedule notification is noti after 5 mins',
                         payload: 'this is scheduled');
                   },
                 ),
-
                 ListTile(
                   title: const Text('Every Hour'),
                   onTap: () {
                     _updateReminderFrequency('Every Hour');
                     LocalNotifications.showSimpleNotifications(
-                        title: 'succes',
+                        title: 'success',
                         body: 'Alarm set',
                         payload: 'watching you');
                     LocalNotifications.showPeriodicNNotificationsHourly(
-                        title: 'Every hour',
+                        title: 'Drink water',
                         body: 'This is every Hour Notification',
                         payload: 'This is every hour data');
                   },
@@ -203,12 +197,11 @@ Future<void> _loadReminderData() async {
                         payload: 'watching you');
 
                     LocalNotifications.showScheduleNotificationstwo(
-                        title: 'every two hour',
+                        title: 'Drink Water',
                         body: 'this is every two hour notification',
                         payload: 'this is every two hour data');
                   },
                 ),
-                
               ],
             ),
           ),
@@ -217,14 +210,14 @@ Future<void> _loadReminderData() async {
     );
   }
 
-  void _updateReminderFrequency(String frequency)async {
+  void _updateReminderFrequency(String frequency) async {
     setState(() {
       selectedReminderFrequency = frequency;
       isReminderSet = true;
     });
-    final box=await Hive.openBox<String>('reminder_data');
+    final box = await Hive.openBox<String>('reminder_data');
     box.put('reminderFrequency', frequency);
-    Navigator.of(context).pop(); 
+    Navigator.of(context).pop();
   }
 
   @override
@@ -238,6 +231,7 @@ Future<void> _loadReminderData() async {
       ),
       drawer: const NavBar(),
       body: Container(
+        height: double.infinity,
         width: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
@@ -252,179 +246,189 @@ Future<void> _loadReminderData() async {
         ),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20.0),
-                  color: const Color.fromARGB(156, 180, 130, 161),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Daily Goal: $dailyGoal ml',
-                      style:
-                          const TextStyle(fontSize: 20.0, color: Colors.white),
-                    ),
-                    const SizedBox(height: 20.0),
-                    AnimatedContainer(
-                      width: 100,
-                      height: 100,
-                      duration: const Duration(milliseconds: 500),
-                      curve: Curves.easeInOut,
-                      child: CircularProgressIndicator(
-                        value: progress,
-                        backgroundColor: Colors.white,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
-                        strokeWidth: 10.0,
-                      ),
-                    ),
-                    const SizedBox(height: 20.0),
-                    Text(
-                      'Consumed: $consumedAmount ml',
-                      style:
-                          const TextStyle(fontSize: 18.0, color: Colors.white),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20.0),
-              ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    showChoiceChips = true;
-                  });
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(156, 180, 130, 161),
-                ),
-                child: const Text('Drink Water',
-                    style: TextStyle(fontSize: 20, color: Colors.white)),
-              ),
-              const SizedBox(height: 20.0),
-              if (showChoiceChips)
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20.0),
+                    color: const Color.fromARGB(156, 180, 130, 161),
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      for (int quantity in [50, 100, 150, 200, 250, 300, 350])
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ChoiceChip(
-                            label: Text('$quantity ml'),
-                            selected: selectedQuantity == quantity,
-                            selectedColor: const Color.fromARGB(156, 175, 90, 141),
-                            onSelected: (bool selected) {
-                              setState(() {
-                                selectedQuantity = selected ? quantity : 0;
-                              });
-                            },
-                          ),
+                      Text(
+                        'Daily Goal: $dailyGoal ml',
+                        style:
+                            const TextStyle(fontSize: 20.0, color: Colors.white),
+                      ),
+                      const SizedBox(height: 20.0),
+                      AnimatedContainer(
+                        width: 100,
+                        height: 100,
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                        child: CircularProgressIndicator(
+                          value: progress,
+                          backgroundColor: Colors.white,
+                          valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                          strokeWidth: 10.0,
                         ),
+                      ),
+                      const SizedBox(height: 20.0),
+                      Text(
+                        'Consumed: $consumedAmount ml',
+                        style:
+                            const TextStyle(fontSize: 18.0, color: Colors.white),
+                      ),
                     ],
                   ),
                 ),
-              const SizedBox(height: 10.0),
-              ElevatedButton(
-                onPressed: () {
-                  _updateConsumedAmount(selectedQuantity);
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(156, 180, 130, 161),
-                ),
-                child: const Text('Update Consumption',
-                    style: TextStyle(fontSize: 20, color: Colors.white)),
-              ),
-              const SizedBox(height: 20.0),
-              ElevatedButton(
+                const SizedBox(height: 20.0),
+                ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context)
-                        .push(MaterialPageRoute(builder: (ctx) {
-                      return  ConsumptionHistoryScreen();
-                    }));
+                    setState(() {
+                      showChoiceChips = true;
+                    });
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(156, 180, 130, 161),
                   ),
-                  child: const Text(
-                    'View Consumption History',
-                    style: TextStyle(fontSize: 18),
-                  )),
-                  SizedBox(height: 10,),
-              Column(
-                children: [
-                  Container(decoration: BoxDecoration(borderRadius: BorderRadius.circular(20),color: const Color.fromARGB(156, 180, 130, 161),),
-                    width: 100,
-                    height: 100,
-                    child: IconButton(
-                      onPressed: () {
-                        if (!isReminderSet) {
-                          _showReminderOptionsDialog();
-                        } else {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text('Existing Reminder'),
-                                content:
-                                    const Text('You already have a reminder set.'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const Text('OK'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        }
-                      },
-                      icon: const Icon(
-                        Icons.alarm,
-                        color: Colors.white,
-                        size: 80,
-                      ),
-                    ),
-                  ),
-                  Text('set alarm',style: MyTextStyles.bodyTextStyle(20),),
-                  const SizedBox(
-                    height: 15,
-                  ),
-                  if (isReminderSet)
-                    Row(
+                  child: const Text('Drink Water',
+                      style: TextStyle(fontSize: 20, color: Colors.white)),
+                ),
+                const SizedBox(height: 20.0),
+                if (showChoiceChips)
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
                       children: [
-                        const SizedBox(
-                          width: 80,
-                        ),
-                        Text(
-                          'Reminder:$selectedReminderFrequency',
-                          style: const TextStyle(fontSize: 18, color: Colors.white),
-                        ),
-                        IconButton(
-                            onPressed: () {
-                              LocalNotifications.cancelAll();
-                              setState(() {
-                                isReminderSet=false;
-                              });
-                            },
-                            icon: const Icon(Icons.cancel))
+                        for (int quantity in [50, 100, 150, 200, 250, 300, 350])
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ChoiceChip(
+                              label: Text('$quantity ml'),
+                              selected: selectedQuantity == quantity,
+                              selectedColor:
+                                  const Color.fromARGB(156, 175, 90, 141),
+                              onSelected: (bool selected) {
+                                setState(() {
+                                  selectedQuantity = selected ? quantity : 0;
+                                });
+                              },
+                            ),
+                          ),
                       ],
                     ),
-                  
-                ],
-              ),
-            ],
+                  ),
+                const SizedBox(height: 10.0),
+                ElevatedButton(
+                  onPressed: () {
+                    _updateConsumedAmount(selectedQuantity);
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(156, 180, 130, 161),
+                  ),
+                  child: const Text('Update Consumption',
+                      style: TextStyle(fontSize: 20, color: Colors.white)),
+                ),
+                const SizedBox(height: 20.0),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context)
+                          .push(MaterialPageRoute(builder: (ctx) {
+                        return ConsumptionHistoryScreen(
+                          consumedAmountFromWaterTrack: consumedAmount,
+                        );
+                      }));
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(156, 180, 130, 161),
+                    ),
+                    child: const Text(
+                      'View Consumption History',
+                      style: TextStyle(fontSize: 18),
+                    )),
+                SizedBox(
+                  height: 10,
+                ),
+                Column(
+                  children: [
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20),
+                        color: const Color.fromARGB(156, 180, 130, 161),
+                      ),
+                      width: 100,
+                      height: 100,
+                      child: IconButton(
+                        onPressed: () {
+                          if (!isReminderSet) {
+                            _showReminderOptionsDialog();
+                          } else {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: const Text('Existing Reminder'),
+                                  content: const Text(
+                                      'You already have a reminder set.'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          }
+                        },
+                        icon: const Icon(
+                          Icons.alarm,
+                          color: Colors.white,
+                          size: 80,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      'set alarm',
+                      style: MyTextStyles.bodyTextStyle(20),
+                    ),
+                    const SizedBox(
+                      height: 15,
+                    ),
+                    if (isReminderSet)
+                      Row(
+                        children: [
+                          const SizedBox(
+                            width: 80,
+                          ),
+                          Text(
+                            'Reminder:$selectedReminderFrequency',
+                            style: const TextStyle(
+                                fontSize: 18, color: Colors.white),
+                          ),
+                          IconButton(
+                              onPressed: () {
+                                LocalNotifications.cancelAll();
+                                setState(() {
+                                  isReminderSet = false;
+                                });
+                              },
+                              icon: const Icon(Icons.cancel))
+                        ],
+                      ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
-
-  
-
-
 }

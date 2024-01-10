@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:newproj/screens/addmed.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:newproj/screens/med.dart';
 import 'package:newproj/screens/meddetailsscreen.dart';
 import 'package:newproj/screens/medmodel.dart';
 import 'package:newproj/screens/navbar.dart';
@@ -27,20 +26,8 @@ class _DailyDoseState extends State<DailyDose> {
     medicineBox = Hive.box<MedicineModel>('MedicineModelBox');
     return Scaffold(
       appBar: AppBar(
-       backgroundColor: Color.fromARGB(255, 116, 74, 129),
+        backgroundColor: const Color.fromARGB(255, 116, 74, 129),
         elevation: 0.0,
-        // leading: IconButton(
-        //   onPressed: () {
-        //     Navigator.pushAndRemoveUntil(
-        //         context,
-        //         MaterialPageRoute(builder: (context) => Medicine()),
-        //         (route) => false);
-        //   },
-        //   icon: const Icon(
-        //     Icons.arrow_back,
-        //     color: Colors.black,
-        //   ),
-        // ),
         title: const Text(
           'Welcome to daily doses',
           style: TextStyle(
@@ -75,15 +62,15 @@ class _DailyDoseState extends State<DailyDose> {
                 },
                 decoration: InputDecoration(
                     labelText: 'search',
-                    labelStyle:
-                        TextStyle(color: Color.fromARGB(255, 116, 74, 129)),
+                    labelStyle: const TextStyle(
+                        color: Color.fromARGB(255, 116, 74, 129)),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(color: Colors.black),
+                      borderSide: const BorderSide(color: Colors.black),
                     ),
                     focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
-                        borderSide: BorderSide(
+                        borderSide: const BorderSide(
                             color: Color.fromARGB(255, 116, 74, 129)))),
               ),
             ),
@@ -94,12 +81,12 @@ class _DailyDoseState extends State<DailyDose> {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
-            return AddMed();
+            return const AddMed();
           }));
         },
-        backgroundColor:  Color.fromARGB(255, 116, 74, 129),
+        backgroundColor: const Color.fromARGB(255, 116, 74, 129),
         foregroundColor: Colors.white,
-        child: Text(
+        child: const Text(
           '+',
           style: TextStyle(fontSize: 30),
         ),
@@ -137,7 +124,7 @@ class _DailyDoseState extends State<DailyDose> {
                     }));
                   },
                   child: Card(
-                    color: Color.fromARGB(255, 116, 74, 129),
+                    color: const Color.fromARGB(255, 116, 74, 129),
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
@@ -161,7 +148,7 @@ class _DailyDoseState extends State<DailyDose> {
           ),
         );
       } else {
-        return Center(
+        return const Center(
           child: Text(
             'No Medicines',
             style: TextStyle(color: Colors.black),
@@ -171,7 +158,5 @@ class _DailyDoseState extends State<DailyDose> {
     } else {
       return const CircularProgressIndicator();
     }
-    
   }
-  
 }

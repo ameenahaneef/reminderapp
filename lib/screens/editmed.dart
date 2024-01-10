@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:newproj/screens/dailydose.dart';
 import 'package:newproj/screens/dbfunctions/meddatabase.dart';
 import 'package:newproj/screens/meddetailsscreen.dart';
 import 'package:newproj/screens/medmodel.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:newproj/screens/notinoti.dart';
-import 'package:newproj/screens/notiservice.dart';
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -28,7 +26,7 @@ class _EditMedState extends State<EditMed> {
   final nameController = TextEditingController();
   final doseController = TextEditingController();
   final desController = TextEditingController();
-  List<String> selectedTimes = [];
+  List<dynamic> selectedTimes = [];
 
   @override
   void initState() {
@@ -216,7 +214,9 @@ class _EditMedState extends State<EditMed> {
                       );
                       if (pickedTime != null) {
                         String period = pickedTime.hour >= 12 ? 'PM' : 'AM';
-    int hour = pickedTime.hourOfPeriod == 0 ? 12 : pickedTime.hourOfPeriod;
+                        int hour = pickedTime.hourOfPeriod == 0
+                            ? 12
+                            : pickedTime.hourOfPeriod;
                         setState(() {
                           selectedTimes
                               .add('$hour:${pickedTime.minute}$period');
@@ -241,7 +241,7 @@ class _EditMedState extends State<EditMed> {
                       children: [
                         Wrap(
                           spacing: 8.0,
-                          children: selectedTimes.map((String time) {
+                          children: selectedTimes.map((dynamic time) {
                             return Chip(
                               label: Text(
                                 time,
@@ -265,7 +265,6 @@ class _EditMedState extends State<EditMed> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         saveUpdatedData();
-                        
                       }
                     },
                     style:
@@ -295,42 +294,41 @@ class _EditMedState extends State<EditMed> {
         selectedTimes: selectedTimes);
 
     DatabaseHelper().updateMedicine(widget.medicine, updatedMedicine);
-    
+
     LocalNotifications.cancelAll();
-  int idCounter = 1; 
+    int idCounter = 1;
 
-  for (String time in selectedTimes) {
-    List<String> parts = time.split(':');
-    int hour = int.parse(parts[0]);
-    int minute = int.parse(parts[1].substring(0, 2));
-    String period = parts[1].substring(2);
+    for (String time in selectedTimes) {
+      List<String> parts = time.split(':');
+      int hour = int.parse(parts[0]);
+      int minute = int.parse(parts[1].substring(0, 2));
+      String period = parts[1].substring(2);
 
-    if (period == 'PM' && hour != 12) {
-      hour += 12;
+      if (period == 'PM' && hour != 12) {
+        hour += 12;
+      }
+
+      DateTime scheduledNotificationDateTime = DateTime(
+        DateTime.now().year,
+        DateTime.now().month,
+        DateTime.now().day,
+        hour,
+        minute,
+      );
+
+      int id = idCounter++;
+      LocalNotifications.scheduleNotification(
+        title: 'Medicine Reminder',
+        body:
+            'Take your medicine: ${updatedMedicine.name},${updatedMedicine.dosage}',
+        payLoad: 'medicine_reminder',
+        scheduledNotificationDateTime: scheduledNotificationDateTime,
+        id: id,
+      );
     }
 
-    DateTime scheduledNotificationDateTime = DateTime(
-      DateTime.now().year,
-      DateTime.now().month,
-      DateTime.now().day,
-      hour,
-      minute,
-    );
-
-    int id = idCounter++; 
-    LocalNotifications.scheduleNotification(
-      title: 'Medicine Reminder',
-      body: 'Take your medicine: ${updatedMedicine.name},${updatedMedicine.dosage}',
-      payLoad: 'medicine_reminder',
-      scheduledNotificationDateTime: scheduledNotificationDateTime,
-      id: id,
-    );
-  }
-
-
-
-    Navigator.of(context).push(MaterialPageRoute(builder: (ctx){
-      return MedicineDetailsScreen(medicine:updatedMedicine);
+    Navigator.of(context).push(MaterialPageRoute(builder: (ctx) {
+      return MedicineDetailsScreen(medicine: updatedMedicine);
     }));
   }
 }

@@ -14,12 +14,6 @@ class DietScreen extends StatelessWidget {
     var categoryBox = Hive.box<Category>('categoryBox');
     List<Category> categories = categoryBox.values.toList();
 
-    
-
-
-
-
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 116, 74, 129),
@@ -48,7 +42,7 @@ class DietScreen extends StatelessWidget {
               crossAxisSpacing: 8.0,
               mainAxisSpacing: 8.0,
             ),
-            itemCount:categories.length,
+            itemCount: categories.length,
             itemBuilder: (context, index) {
               Category category = categories[index];
               return GestureDetector(
@@ -90,11 +84,8 @@ class DietScreen extends StatelessWidget {
               );
             },
           ),
-        
         ),
-        
       ),
     );
   }
-  
 }

@@ -13,7 +13,7 @@ class AdminAdd extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 127, 65, 138),
+        backgroundColor: const Color.fromARGB(255, 127, 65, 138),
         title: const Text('Admin - Add Category'),
         actions: [
           IconButton(
@@ -22,8 +22,9 @@ class AdminAdd extends StatelessWidget {
                   return CategoryDisplay();
                 }));
               },
-              icon: Icon(Icons.category))
+              icon: const Icon(Icons.category))
         ],
+        automaticallyImplyLeading: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -76,7 +77,7 @@ class _AddCategoryFormState extends State<AddCategoryForm> {
                     width: 250,
                     height: 200,
                     color: Colors.grey[300],
-                    child: Center(
+                    child: const Center(
                       child: Icon(Icons.camera_alt, size: 50),
                     ),
                   )
@@ -120,14 +121,14 @@ class _AddCategoryFormState extends State<AddCategoryForm> {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: Text('Error'),
-                        content: Text('Please fill all the fields'),
+                        title: const Text('Error'),
+                        content: const Text('Please fill all the fields'),
                         actions: [
                           TextButton(
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
-                              child: Text('ok'))
+                              child: const Text('ok'))
                         ],
                       );
                     });
@@ -162,17 +163,53 @@ class _AddCategoryFormState extends State<AddCategoryForm> {
                     .forEach((day) => day.forEach((meal) => meal.clear()));
               });
             },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color.fromARGB(255, 127, 65, 138),
+            ),
             child: const Text('Save Category'),
           ),
           const SizedBox(height: 16.0),
-          IconButton(
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginScreen()),
-              );
-            },
-            icon: const Icon(Icons.logout),
+          Container(
+            decoration: BoxDecoration(
+                color: Color.fromARGB(255, 127, 65, 138),
+                borderRadius: BorderRadius.circular(20)),
+            width: 100,
+            height: 100,
+            child: IconButton(
+              onPressed: () async {
+                await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return AlertDialog(
+                        title: Text('Logout'),
+                        content: Text('Are you sure you want to logout?'),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text('cancel'),
+                          ),
+                          TextButton(
+                              onPressed: () {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const LoginScreen()),
+                                );
+                              },
+                              child: Text('OK'))
+                        ],
+                      );
+                    });
+              },
+              icon: const Icon(
+                Icons.logout,
+                color: Colors.white,
+                size: 30,
+              ),
+            ),
           ),
         ],
       ),

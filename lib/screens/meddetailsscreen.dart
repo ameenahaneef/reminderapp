@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:newproj/screens/addmed.dart';
 import 'package:newproj/screens/dailydose.dart';
 import 'package:newproj/screens/dbfunctions/meddatabase.dart';
 import 'package:newproj/screens/editmed.dart';
@@ -35,17 +34,16 @@ class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          
           title: const Text('Medicine Details'),
           leading: GestureDetector(
-            onTap: (){
-              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (ctx){
+            onTap: () {
+              Navigator.of(context)
+                  .pushReplacement(MaterialPageRoute(builder: (ctx) {
                 return DailyDose();
               }));
             },
             child: const Icon(Icons.arrow_back),
           ),
-
           backgroundColor: Colors.black,
           elevation: 0.0,
         ),
@@ -179,6 +177,4 @@ class _MedicineDetailsScreenState extends State<MedicineDetailsScreen> {
                   )),
             )));
   }
-
-  
 }

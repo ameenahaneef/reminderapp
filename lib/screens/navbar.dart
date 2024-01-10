@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:newproj/main.dart';
+import 'package:newproj/screens/aboutapp.dart';
 import 'package:newproj/screens/login.dart';
 import 'package:newproj/screens/mainhome.dart';
+import 'package:newproj/screens/privacy.dart';
 import 'package:newproj/screens/profile.dart';
+//import 'package:rxdart/rxdart.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:share_plus/share_plus.dart';
 
 class NavBar extends StatelessWidget {
   const NavBar({Key? key}) : super(key: key);
@@ -55,6 +59,33 @@ class NavBar extends StatelessWidget {
             },
           ),
           ListTile(
+            leading: Icon(Icons.info_outline_rounded),
+            title: Text('About'),
+            onTap: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (ctx){
+                return AboutUs();
+              }));
+            },
+
+          ),
+          ListTile(
+            leading: Icon(Icons.privacy_tip),
+            title: Text('Privacy Policy'),
+            onTap: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (ctx){
+                return PrivacyPolicy();
+              }));
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.share),
+            title: Text('Share'),
+            onTap: (){
+              Share.share('text');
+            },
+
+          ),
+          ListTile(
             leading: Icon(Icons.logout),
             title: Text('Logout'),
             onTap: () {
@@ -65,11 +96,15 @@ class NavBar extends StatelessWidget {
                       title: Text('Logout'),
                       content: Text('Are you sure you want to logout?'),
                       actions: [
-                        TextButton(onPressed: () {Navigator.of(context).pop();}, child: Text('cancel')),
+                        TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: Text('cancel')),
                         TextButton(
                             onPressed: () {
                               logout();
-                            
+
                               Navigator.of(context).pushAndRemoveUntil(
                                   MaterialPageRoute(builder: (ctx) {
                                 return LoginScreen();
@@ -85,6 +120,7 @@ class NavBar extends StatelessWidget {
       ),
     );
   }
+
   Future<void> logout() async {
     final SharedPreferences _sharedPrefs =
         await SharedPreferences.getInstance();

@@ -13,7 +13,6 @@ class DatabaseOperations {
         description.isEmpty ||
         image == null ||
         mealPlan.any((day) => day.any((meal) => meal.isEmpty))) {
-          
       print('Please fill in all the required fields');
       return;
     }
@@ -21,15 +20,14 @@ class DatabaseOperations {
     var category = Category(
       categoryName: categoryName,
       description: description,
-      imagePath: image.path ,
+      imagePath: image.path,
       mealPlan: mealPlan,
     );
 
-    print('Category Data: $category'); 
+    print('Category Data: $category');
 
     var categoryBox = Hive.box<Category>('categoryBox');
     categoryBox.add(category);
     print('Category added to Hive');
   }
-  
 }

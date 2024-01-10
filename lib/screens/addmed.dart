@@ -6,9 +6,6 @@ import 'package:newproj/screens/medmodel.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:newproj/screens/notinoti.dart';
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/timezone.dart' as tz;
-
 
 FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -268,18 +265,17 @@ class _AddMedState extends State<AddMed> {
                           );
                         } else {
                           saveMedicineToHive();
-                  LocalNotifications.showSimpleNotifications(title: 'medicine save', body: 'we will track', payload: 'this is your medicine');
-                   Navigator.of(context)
+                          LocalNotifications.showSimpleNotifications(
+                              title: 'medicine save',
+                              body: 'we will track',
+                              payload: 'this is your medicine');
+                          Navigator.of(context)
                               .push(MaterialPageRoute(builder: (ctx) {
                             return const DailyDose();
                           }));
                         }
-                    }
-                  },
-                  
-
-
-
+                      }
+                    },
                     style:
                         ElevatedButton.styleFrom(backgroundColor: Colors.white),
                     child: const Text(
@@ -304,17 +300,10 @@ class _AddMedState extends State<AddMed> {
       beforeOrAfter = 'After Food';
     }
 
-//  List<String> formattedTimes = selectedTimes.map((time) {
-//     String hour = time.hour.toString();
-//     String minute = time.minute < 10 ? '0${time.minute}' : time.minute.toString();
-//     return '$hour.$minute';
-//   }).toList();
- // Convert TimeOfDay objects to a formatted string with AM/PM
-  List<String> formattedTimes = selectedTimes.map((time) {
-    String period = time.period == DayPeriod.am ? 'AM' : 'PM';
-    return '${time.hourOfPeriod}:${time.minute} $period';
-  }).toList();
-
+    List<String> formattedTimes = selectedTimes.map((time) {
+      String period = time.period == DayPeriod.am ? 'AM' : 'PM';
+      return '${time.hourOfPeriod}:${time.minute} $period';
+    }).toList();
 
     await DatabaseHelper().saveMedicineToHive(
         name: nameController.text,
@@ -322,8 +311,7 @@ class _AddMedState extends State<AddMed> {
         description: desController.text,
         type: selectedChoice,
         beforeOrAfter: beforeOrAfter,
-        selectedTimes:formattedTimes);
-            // selectedTimes.map((time) => time.format(context)).toList());
+        selectedTimes: formattedTimes);
   }
 
   Future<void> _selectTime(BuildContext context) async {
@@ -331,42 +319,42 @@ class _AddMedState extends State<AddMed> {
       context: context,
       initialTime: TimeOfDay.now(),
     );
-if(selectedTime!=null){
-  
 
+    if (selectedTime != null) {
+      DateTime now = DateTime.now();
+      DateTime selectedDateTime = DateTime(
+        now.year,
+        now.month,
+        now.day,
+        selectedTime.hour,
+        selectedTime.minute,
+      );
 
-    setState(() {
-       selectedTimes.add(selectedTime);
-    });
- int baseNotificationId = DateTime.now().millisecondsSinceEpoch ~/ 1000;
-    selectedTimes.asMap().forEach((index, time) async {
-      int notificationId = baseNotificationId + index;
-    DateTime notificationTime = DateTime.now();
-    notificationTime = DateTime(
-      notificationTime.year,
-      notificationTime.month,
-      notificationTime.day,
-      time.hour,
-     time.minute,
-    );
+      if (selectedDateTime.isBefore(now)) {
+        selectedDateTime = selectedDateTime.add(Duration(days: 1));
+      }
 
- String medicineName = nameController.text; // Get medicine name
-      String dosage = doseController.text; // Get dosage
+      setState(() {
+        selectedTimes.add(TimeOfDay.fromDateTime(selectedDateTime));
+      });
 
-String bodyy='Medicine:$medicineName,Dosage:$dosage';
-    LocalNotifications.scheduleNotification(
-      title: 'Hey,its time to take your medicine',
-      body: bodyy,
-      payLoad: 'noti at time',
-      scheduledNotificationDateTime: notificationTime,
-      id:notificationId,
-    );
+      int baseNotificationId = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+      selectedTimes.forEach((time) async {
+        int notificationId = baseNotificationId + selectedTimes.indexOf(time);
+        DateTime notificationTime = selectedDateTime;
 
+        String medicineName = nameController.text;
+        String dosage = doseController.text;
+        String bodyy = 'Medicine:$medicineName,Dosage:$dosage';
 
-
-     
-    });
+        LocalNotifications.scheduleNotification(
+          title: 'Hey, it\'s time to take your medicine',
+          body: bodyy,
+          payLoad: 'noti at time',
+          scheduledNotificationDateTime: notificationTime,
+          id: notificationId,
+        );
+      });
+    }
   }
 }
-  }
-
