@@ -218,7 +218,7 @@ class _LoginScreenState extends State<LoginScreen> {
           await SharedPreferences.getInstance();
       _sharedPrefs.setBool(saveKeyName, true);
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (ctx) => const MainHome()),
+        MaterialPageRoute(builder: (ctx) =>  MainHome()),
       );
     } else {
       _showErrorSnackBar();

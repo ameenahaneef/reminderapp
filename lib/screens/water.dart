@@ -154,7 +154,7 @@ class WaterScreen extends StatelessWidget {
                           '51%'),
                     ],
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 4,
                   ),
                   Row(

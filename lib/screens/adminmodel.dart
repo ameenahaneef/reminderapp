@@ -14,8 +14,9 @@ class Category {
   late final String imagePath;
 
   @HiveField(3)
-  final List<List<String>> mealPlan;
+  final List<List<List<String>>> mealPlan;
 
+  
   Category({
     required this.categoryName,
     required this.description,

@@ -5,7 +5,7 @@ import 'package:newproj/screens/med.dart';
 import 'package:newproj/screens/water.dart';
 
 class MainHome extends StatelessWidget {
-  const MainHome({super.key});
+  MainHome({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,8 @@ class MainHome extends StatelessWidget {
         child: Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: true,
-        backgroundColor: Colors.black,
+        backgroundColor: Color.fromARGB(255, 10, 9, 9),
+        elevation: 0,
       ),
       drawer: NavBar(),
       body: Container(
@@ -59,8 +60,6 @@ class MainHome extends StatelessWidget {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Container(
-                      // width: 320,
-                      // height: 150,
                       decoration: const BoxDecoration(
                           color: Color.fromARGB(86, 0, 0, 0),
                           borderRadius: BorderRadius.only(
@@ -74,7 +73,9 @@ class MainHome extends StatelessWidget {
                               alignment: Alignment.topCenter,
                               child: Row(
                                 children: [
-                                  Image(
+                                  FadeInImage(
+                                    placeholder:
+                                        AssetImage('assets/images/27002.jpg'),
                                     image: AssetImage(
                                         'assets/[removal.ai]_22809c63-fbeb-4910-a3c2-7bd80fe847aa-m028t0135_e_medical_icon_24aug22 (1).png'),
                                     width: 120,
@@ -107,8 +108,6 @@ class MainHome extends StatelessWidget {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Container(
-                      // width: 150,
-                      // height: 150,
                       decoration: const BoxDecoration(
                           color: Color.fromARGB(86, 0, 0, 0),
                           borderRadius: BorderRadius.only(
@@ -122,7 +121,9 @@ class MainHome extends StatelessWidget {
                               alignment: Alignment.topCenter,
                               child: Row(
                                 children: [
-                                  Image(
+                                  FadeInImage(
+                                    placeholder:
+                                        AssetImage('assets/images/27002.jpg'),
                                     image: AssetImage(
                                         'assets/images/Water (1).png'),
                                     width: 120,
@@ -153,8 +154,6 @@ class MainHome extends StatelessWidget {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: Container(
-                      // width: 150,
-                      // height: 150,
                       decoration: const BoxDecoration(
                           color: Color.fromARGB(86, 0, 0, 0),
                           borderRadius: BorderRadius.only(
@@ -168,7 +167,9 @@ class MainHome extends StatelessWidget {
                               alignment: Alignment.topCenter,
                               child: Row(
                                 children: [
-                                  Image(
+                                  FadeInImage(
+                                    placeholder:
+                                        AssetImage('assets/images/27002.jpg'),
                                     image:
                                         AssetImage('assets/images/Plate.png'),
                                     width: 120,

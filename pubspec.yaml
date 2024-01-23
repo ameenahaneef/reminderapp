@@ -83,6 +83,10 @@ flutter:
     - assets/images/[removal.ai]_eaeb350f-3c8b-4239-b46c-32c1b9e150ee-nmwy_e2e9_220113.png
     - assets/images/[removal.ai]_f615a221-ce10-4f99-a081-bf00e6da5a03-human-internal-organ-with-intestine_1308-108352.png
     - assets/images/360_F_109403481_g8LbMgibBxrnl7CBc201wcJsNihOWTF2.webp
+    - assets/images/paleo.jpeg
+    - assets/images/keto.jpeg
+    - assets/images/mediteraneean.jpeg
+    - assets/images/27002.jpg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
   # For details regarding adding assets from package dependencies, see

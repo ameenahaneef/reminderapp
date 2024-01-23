@@ -6,13 +6,14 @@ class UserScreen extends StatelessWidget {
   final Category selectedCategory;
 
   UserScreen({required this.selectedCategory});
+
   static const List<String> mealTimes = ['Breakfast', 'Lunch', 'Dinner'];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromARGB(255, 116, 74, 129),
+        backgroundColor: const Color.fromARGB(255, 116, 74, 129),
         elevation: 0,
       ),
       body: Container(
@@ -35,19 +36,14 @@ class UserScreen extends StatelessWidget {
               children: [
                 ClipRRect(
                   borderRadius: BorderRadius.circular(100),
-                  child: Image.file(
-                    File(selectedCategory.imagePath),
-                    height: 200,
-                    width: 200,
-                    fit: BoxFit.cover,
-                  ),
+                  child: _buildImage(selectedCategory.imagePath),
                 ),
                 const SizedBox(
                   height: 16,
                 ),
                 Text(
                   '${selectedCategory.categoryName}',
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                       color: Colors.white),
@@ -55,13 +51,15 @@ class UserScreen extends StatelessWidget {
                 Card(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),
-                    margin: EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-                    color: Color.fromARGB(255, 220, 210, 223),
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+                    color: const Color.fromARGB(255, 220, 210, 223),
                     child: Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
                         '${selectedCategory.description}',
-                        style: TextStyle(color: Colors.black, fontSize: 16),
+                        style:
+                            const TextStyle(color: Colors.black, fontSize: 16),
                       ),
                     )),
                 const Center(
@@ -80,7 +78,8 @@ class UserScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(20),
                       ),
                       color: const Color.fromARGB(255, 220, 210, 223),
-                      margin: const EdgeInsets.symmetric(vertical: 16, horizontal: 18),
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 16, horizontal: 18),
                       child: Padding(
                         padding: const EdgeInsets.all(16.0),
                         child: Column(
@@ -97,15 +96,38 @@ class UserScreen extends StatelessWidget {
                             for (int meal = 0;
                                 meal < selectedCategory.mealPlan[day].length;
                                 meal++)
-                              ListTile(
-                                title: Text(
-                                  mealTimes[meal],
-                                  style: const TextStyle(fontSize: 18,color: Colors.black,fontWeight: FontWeight.w500),
-                                ),
-                                subtitle: Text(
-                                  selectedCategory.mealPlan[day][meal],
-                                  style: const TextStyle(fontSize: 16,color: Colors.black),
-                                ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    mealTimes[meal],
+                                    style: const TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      for (int optionIndex = 0;
+                                          optionIndex <
+                                              selectedCategory
+                                                  .mealPlan[day][meal].length;
+                                          optionIndex++)
+                                        Text(
+                                          '${getOptionNumber(optionIndex)}: ${selectedCategory.mealPlan[day][meal][optionIndex]}',
+                                          style: const TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.black,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                  const SizedBox(
+                                    height: 5,
+                                  )
+                                ],
                               ),
                             const SizedBox(height: 8.0),
                           ],
@@ -119,5 +141,36 @@ class UserScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  String getOptionNumber(int optionIndex) {
+    switch (optionIndex) {
+      case 0:
+        return '1';
+      case 1:
+        return '2';
+      case 2:
+        return '3';
+      default:
+        return '';
+    }
+  }
+
+  Widget _buildImage(String imagePath) {
+    if (imagePath.startsWith('assets/')) {
+      return Image.asset(
+        imagePath,
+        height: 200,
+        width: 200,
+        fit: BoxFit.cover,
+      );
+    } else {
+      return Image.file(
+        File(imagePath),
+        height: 200,
+        width: 200,
+        fit: BoxFit.cover,
+      );
+    }
   }
 }

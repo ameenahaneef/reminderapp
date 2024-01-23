@@ -21,7 +21,9 @@ class CategoryAdapter extends TypeAdapter<Category> {
       description: fields[1] as String,
       imagePath: fields[2] as String,
       mealPlan: (fields[3] as List)
-          .map((dynamic e) => (e as List).cast<String>())
+          .map((dynamic e) => (e as List)
+              .map((dynamic e) => (e as List).cast<String>())
+              .toList())
           .toList(),
     );
   }

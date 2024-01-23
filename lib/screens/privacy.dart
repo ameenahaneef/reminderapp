@@ -342,7 +342,7 @@ India
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.black,
-        title: Text('Privacy Policy'),
+        title: const Text('Privacy Policy'),
       ),
       body: Container(
         decoration: const BoxDecoration(

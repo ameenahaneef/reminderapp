@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:newproj/screens/login.dart';
 import 'package:newproj/screens/model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({super.key});
@@ -67,10 +68,12 @@ class _SignupScreenState extends State<SignupScreen> {
                                         const BorderSide(color: Colors.white)),
                                 errorBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
-                                  borderSide: const BorderSide(color: Colors.red),
+                                  borderSide:
+                                      const BorderSide(color: Colors.red),
                                 ),
                                 labelText: 'Fullname',
-                                labelStyle: const TextStyle(color: Colors.white)),
+                                labelStyle:
+                                    const TextStyle(color: Colors.white)),
                             style: const TextStyle(color: Colors.white),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -84,18 +87,20 @@ class _SignupScreenState extends State<SignupScreen> {
                             decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
-                                  borderSide: const BorderSide(color: Colors.white)),
+                                  borderSide:
+                                      const BorderSide(color: Colors.white)),
                               focusedBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
-                                  borderSide: const BorderSide(color: Colors.white)),
+                                  borderSide:
+                                      const BorderSide(color: Colors.white)),
                               errorBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(20),
-                                borderSide:const BorderSide(color: Colors.red),
+                                borderSide: const BorderSide(color: Colors.red),
                               ),
                               labelText: 'Email id',
                               labelStyle: const TextStyle(color: Colors.white),
                             ),
-                            style:const TextStyle(color: Colors.white),
+                            style: const TextStyle(color: Colors.white),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'please enter your email id';
@@ -114,19 +119,21 @@ class _SignupScreenState extends State<SignupScreen> {
                                 enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(20),
                                     borderSide:
-                                       const BorderSide(color: Colors.white)),
+                                        const BorderSide(color: Colors.white)),
                                 focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(20),
                                     borderSide:
-                                      const  BorderSide(color: Colors.white)),
+                                        const BorderSide(color: Colors.white)),
                                 errorBorder: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(20),
-                                  borderSide:const BorderSide(color: Colors.red),
+                                  borderSide:
+                                      const BorderSide(color: Colors.red),
                                 ),
                                 labelText: 'Password',
-                                labelStyle:const TextStyle(color: Colors.white)),
+                                labelStyle:
+                                    const TextStyle(color: Colors.white)),
                             keyboardType: TextInputType.number,
-                            style:const TextStyle(color: Colors.white),
+                            style: const TextStyle(color: Colors.white),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'please enter your password';
@@ -169,13 +176,17 @@ class _SignupScreenState extends State<SignupScreen> {
             )));
   }
 
-  void _storeData() {
+  void _storeData() async {
     final model = Model(
         name: nameController.text,
         email: emailidController.text,
         password: passwordsController.text);
     final box = Hive.box<Model>('Modelbox');
     box.add(model);
+    final SharedPreferences _sharedPrefs =
+        await SharedPreferences.getInstance();
+    await _sharedPrefs.setString('userName', model.name);
+
     print('data successfully');
     print('name:${model.name}');
     print('email:${model.email}');

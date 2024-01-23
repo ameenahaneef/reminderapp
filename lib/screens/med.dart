@@ -66,7 +66,7 @@ class Medicine extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                         fontStyle: FontStyle.italic),
                   )),
-              SizedBox(
+              const SizedBox(
                 height: 60,
               ),
               const Image(

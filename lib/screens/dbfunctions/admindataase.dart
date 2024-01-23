@@ -7,7 +7,7 @@ class DatabaseOperations {
     required String categoryName,
     required String description,
     required File? image,
-    required List<List<String>> mealPlan,
+    required List<List<List<String>>> mealPlan,
   }) async {
     if (categoryName.isEmpty ||
         description.isEmpty ||
@@ -29,5 +29,14 @@ class DatabaseOperations {
     var categoryBox = Hive.box<Category>('categoryBox');
     categoryBox.add(category);
     print('Category added to Hive');
+  }
+
+  static Future<void> updateCategory(int index, Category updatedCategory) async {
+    var categoryBox = await Hive.openBox<Category>('categoryBox');
+    categoryBox.putAt(index, updatedCategory);
+  }
+   static Future<void> deleteCategory(int index) async {
+    var categoryBox = await Hive.openBox<Category>('categoryBox');
+    categoryBox.deleteAt(index);
   }
 }

@@ -111,7 +111,7 @@ class _DailyDoseState extends State<DailyDose> {
                 crossAxisCount: 3,
                 crossAxisSpacing: 8.0,
                 mainAxisSpacing: 8.0,
-                childAspectRatio: 0.9,
+                childAspectRatio: 1.2,
               ),
               itemCount: medicines.length,
               itemBuilder: (context, index) {

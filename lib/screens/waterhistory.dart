@@ -2,126 +2,90 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:newproj/screens/style.dart';
-import 'package:newproj/screens/watermodel.dart'; 
+import 'package:newproj/screens/watermodel.dart';
 
-class ConsumptionHistoryScreen extends StatefulWidget {
-  final int consumedAmountFromWaterTrack;
-  const ConsumptionHistoryScreen({required this.consumedAmountFromWaterTrack});
-  @override
-  _ConsumptionHistoryScreenState createState() =>
-      _ConsumptionHistoryScreenState();
-}
-
-class _ConsumptionHistoryScreenState extends State<ConsumptionHistoryScreen> {
-  late Future<Box<ConsumptionData>> _boxFuture;
-
-  @override
-  void initState() {
-    super.initState();
-    _boxFuture = _openBox();
-  }
-
-  Future<Box<ConsumptionData>> _openBox() async {
-    final box = await Hive.openBox<ConsumptionData>('consumption_data');
-    return box;
-  }
-
-  List<ConsumptionData> _groupDataByDay(List<ConsumptionData> dataList) {
-    Map<DateTime, List<ConsumptionData>> groupedData = {};
-
-    for (var data in dataList) {
-      DateTime day = DateTime(
-          data.consumedDay.year, data.consumedDay.month, data.consumedDay.day);
-      groupedData[day] = groupedData[day] ?? [];
-      groupedData[day]!.add(data);
-    }
-
-    List<ConsumptionData> result = [];
-
-    groupedData.forEach((key, value) {
-      int totalConsumedAmount = 0;
-      for (var data in value) {
-        totalConsumedAmount += data.consumedAmount;
-      }
-      result.add(ConsumptionData(
-          consumedDay: key,
-          consumedAmount: widget.consumedAmountFromWaterTrack,
-          reminderInterval: ''));
-    });
-
-    return result;
-  }
-
+class DailyConsumptionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text('Daily Consumption'),
         backgroundColor: Colors.black,
-        title: Text('Consumption History'),
+        elevation: 0.0,
       ),
       body: Container(
+        width: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            stops: [0.0, 0.9],
+            stops: [0.4, 0.7],
             colors: [
-              Color.fromARGB(255, 10, 9, 9),
-              Color.fromARGB(255, 116, 74, 129),
+              Colors.black,
+              Color.fromARGB(255, 94, 66, 103),
             ],
           ),
         ),
         child: FutureBuilder(
-          future: _boxFuture,
+          future: _loadDailyConsumptionData(),
           builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              if (snapshot.hasError) {
-                return Center(
-                  child: Text('Error: ${snapshot.error}'),
-                );
-              } else {
-                final box = snapshot.data as Box<ConsumptionData>;
-                if (box.isNotEmpty) {
-                  List<ConsumptionData> dataList = box.values.toList();
-                  List<ConsumptionData> groupedData = _groupDataByDay(dataList);
-
-                  return ListView.separated(
-                    itemCount: groupedData.length,
-                    itemBuilder: (context, index) {
-                      final data = groupedData[index];
-                      final formattedDate =
-                          DateFormat.yMd().format(data.consumedDay);
-                      return ListTile(
-                        title: Text(
-                          '$formattedDate',
-                          style: MyTextStyles.bodyTextStyle(15),
-                        ),
-                        subtitle: Text(
-                          'Consumed Amount: ${data.consumedAmount} ml',
-                          style: MyTextStyles.bodyTextStyle(15),
-                        ),
-                      );
-                    },
-                    separatorBuilder: (BuildContext context, int index) =>
-                        Divider(),
-                  );
-                } else {
-                  return Center(
-                    child: Text(
-                      'No consumption data available.',
-                      style: MyTextStyles.bodyTextStyle(20),
-                    ),
-                  );
-                }
-              }
-            } else {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return CircularProgressIndicator();
+            } else if (snapshot.hasError) {
+              return Text('Error: ${snapshot.error}');
+            } else if (!snapshot.hasData || (snapshot.data as List).isEmpty) {
               return Center(
-                child: CircularProgressIndicator(),
+                child: Text(
+                  'No daily consumption data available.',
+                  style: MyTextStyles.bodyTextStyle(16),
+                ),
+              );
+            } else {
+              List<ConsumptionData> dailyConsumptionData =
+                  snapshot.data as List<ConsumptionData>;
+
+              return ListView.builder(
+                itemCount: dailyConsumptionData.length,
+                itemBuilder: (context, index) {
+                  ConsumptionData data = dailyConsumptionData[index];
+
+                  return ListTile(
+                    title: Text(
+                        'Date: ${DateFormat('yyyy-MM-dd').format(data.consumedDay)}',
+                        style: MyTextStyles.bodyTextStyle(16)),
+                    subtitle: Text('Consumed Amount: ${data.consumedAmount} ml',
+                        style: MyTextStyles.bodyTextStyle(16)),
+                  );
+                },
               );
             }
           },
         ),
       ),
     );
+  }
+
+  Future<List<ConsumptionData>> _loadDailyConsumptionData() async {
+    final box = await Hive.openBox<ConsumptionData>('consumption_data');
+    Map<DateTime, int> dailyConsumptionMap = {};
+
+    for (var entry in box.values) {
+      DateTime day = DateTime(entry.consumedDay.year, entry.consumedDay.month,
+          entry.consumedDay.day);
+      dailyConsumptionMap[day] =
+          (dailyConsumptionMap[day] ?? 0) + entry.consumedAmount;
+    }
+
+    List<ConsumptionData> dailyConsumptionData = [];
+
+    dailyConsumptionMap.forEach((day, totalConsumedAmount) {
+      dailyConsumptionData.add(ConsumptionData(
+        consumedDay: day,
+        consumedAmount: totalConsumedAmount,
+        reminderInterval: '',
+      ));
+    });
+
+    return dailyConsumptionData;
   }
 }

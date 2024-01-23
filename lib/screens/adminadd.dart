@@ -55,11 +55,14 @@ class _AddCategoryFormState extends State<AddCategoryForm> {
 
   final TextEditingController categoryNameController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
-  final List<List<TextEditingController>> mealControllers = List.generate(
+  final List<List<List<TextEditingController>>> mealControllers = List.generate(
     7,
-    (index) => List.generate(
+    (dayIndex) => List.generate(
       3,
-      (index) => TextEditingController(),
+      (mealIndex) => List.generate(
+        3,
+        (optionIndex) => TextEditingController(),
+      ),
     ),
   );
 
@@ -100,11 +103,19 @@ class _AddCategoryFormState extends State<AddCategoryForm> {
               children: [
                 Text('Day ${day + 1}'),
                 for (int meal = 0; meal < 3; meal++)
-                  TextField(
-                    controller: mealControllers[day][meal],
-                    decoration: InputDecoration(
-                      labelText: mealTimes[meal],
-                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('${mealTimes[meal]} Options:'),
+                      for (int option = 0; option < 3; option++)
+                        TextField(
+                          controller: mealControllers[day][meal][option],
+                          decoration: InputDecoration(
+                            labelText:
+                                '${mealTimes[meal]} Option ${option + 1}',
+                          ),
+                        ),
+                    ],
                   ),
                 const SizedBox(height: 8.0),
               ],
@@ -115,8 +126,8 @@ class _AddCategoryFormState extends State<AddCategoryForm> {
               if (categoryNameController.text.isEmpty ||
                   descriptionController.text.isEmpty ||
                   _image == null ||
-                  mealControllers
-                      .any((day) => day.any((meal) => meal.text.isEmpty))) {
+                  mealControllers.any((day) => day.any(
+                      (meal) => meal.any((option) => option.text.isEmpty)))) {
                 showDialog(
                     context: context,
                     builder: (BuildContext context) {
@@ -138,9 +149,12 @@ class _AddCategoryFormState extends State<AddCategoryForm> {
 
               File? imageFile = _image;
 
-              List<List<String>> mealPlan = mealControllers
-                  .map((controllers) =>
-                      controllers.map((controller) => controller.text).toList())
+              List<List<List<String>>> mealPlan = mealControllers
+                  .map((dayControllers) => dayControllers
+                      .map((mealControllers) => mealControllers
+                          .map((controller) => controller.text)
+                          .toList())
+                      .toList())
                   .toList();
 
               await DatabaseOperations.saveCategory(
@@ -149,7 +163,7 @@ class _AddCategoryFormState extends State<AddCategoryForm> {
                   image: imageFile,
                   mealPlan: mealPlan);
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
+                const SnackBar(
                   content: Text('Stored successfully'),
                   backgroundColor: Colors.green,
                 ),
@@ -159,19 +173,19 @@ class _AddCategoryFormState extends State<AddCategoryForm> {
                 _image = null;
                 categoryNameController.clear();
                 descriptionController.clear();
-                mealControllers
-                    .forEach((day) => day.forEach((meal) => meal.clear()));
+                mealControllers.forEach((day) => day.forEach(
+                    (meal) => meal.forEach((option) => option.clear())));
               });
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: Color.fromARGB(255, 127, 65, 138),
+              backgroundColor: const Color.fromARGB(255, 127, 65, 138),
             ),
             child: const Text('Save Category'),
           ),
           const SizedBox(height: 16.0),
           Container(
             decoration: BoxDecoration(
-                color: Color.fromARGB(255, 127, 65, 138),
+                color: const Color.fromARGB(255, 127, 65, 138),
                 borderRadius: BorderRadius.circular(20)),
             width: 100,
             height: 100,
@@ -181,14 +195,14 @@ class _AddCategoryFormState extends State<AddCategoryForm> {
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
-                        title: Text('Logout'),
-                        content: Text('Are you sure you want to logout?'),
+                        title: const Text('Logout'),
+                        content: const Text('Are you sure you want to logout?'),
                         actions: [
                           TextButton(
                             onPressed: () {
                               Navigator.of(context).pop();
                             },
-                            child: Text('cancel'),
+                            child: const Text('cancel'),
                           ),
                           TextButton(
                               onPressed: () {
@@ -199,7 +213,7 @@ class _AddCategoryFormState extends State<AddCategoryForm> {
                                           const LoginScreen()),
                                 );
                               },
-                              child: Text('OK'))
+                              child: const Text('OK'))
                         ],
                       );
                     });

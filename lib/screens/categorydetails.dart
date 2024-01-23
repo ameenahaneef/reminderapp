@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:newproj/screens/dbfunctions/admindataase.dart';
 import 'package:newproj/screens/dietdetails.dart';
 import 'package:newproj/screens/dietedit.dart';
 import 'adminmodel.dart';
@@ -86,7 +87,8 @@ class _CategoryDisplayState extends State<CategoryDisplay> {
                                         ),
                                         TextButton(
                                           onPressed: () {
-                                            categoryBox.deleteAt(index);
+                                            DatabaseOperations.deleteCategory(
+                                                index);
                                             Navigator.of(context).pop();
                                             setState(() {});
                                           },

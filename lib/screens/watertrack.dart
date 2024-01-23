@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:newproj/screens/dbfunctions/waterdatabase.dart';
 import 'package:newproj/screens/navbar.dart';
 import 'package:newproj/screens/notinoti.dart';
 import 'package:newproj/screens/style.dart';
@@ -7,6 +8,8 @@ import 'package:newproj/screens/waterhistory.dart';
 import 'package:newproj/screens/watermodel.dart';
 
 class WaterTrack extends StatefulWidget {
+  static String selectedReminderFrequency = 'every minute';
+
   const WaterTrack({Key? key}) : super(key: key);
 
   @override
@@ -25,48 +28,52 @@ class _WaterTrackState extends State<WaterTrack> {
   @override
   void initState() {
     super.initState();
-    _loadConsumptionData();
-    _loadReminderData();
+
+    WaterHelper.loadConsumptionData(_setConsumptionData);
+    WaterHelper.loadReminderData(_setReminderData);
+  }
+
+  void _setConsumptionData(int consumedAmount, DateTime lastConsumptionDate) {
+    setState(() {
+      this.consumedAmount = consumedAmount;
+      this.lastConsumptionDate = lastConsumptionDate;
+    });
+  }
+
+  void _setReminderData(String reminderFrequency) {
+    setState(() {
+      selectedReminderFrequency = reminderFrequency;
+      isReminderSet = true;
+    });
   }
 
   Future<void> _loadReminderData() async {
-    final box = await Hive.openBox<String>('reminder_data');
-    final reminderFrequency = box.get('reminderFrequency');
-
-    if (reminderFrequency != null) {
-      setState(() {
-        selectedReminderFrequency = reminderFrequency;
-        isReminderSet = true;
-      });
-    }
+    WaterHelper.loadReminderData(_setReminderData);
   }
 
   Future<void> _loadConsumptionData() async {
-    final box = await Hive.openBox<ConsumptionData>('consumption_data');
-    final lastConsumptionData = box.values.lastOrNull;
-
-    if (lastConsumptionData != null) {
-      setState(() {
-        consumedAmount = lastConsumptionData.consumedAmount;
-        lastConsumptionDate = lastConsumptionData.consumedDay;
-      });
-    }
+    WaterHelper.loadConsumptionData(_setConsumptionData);
   }
 
   Future<void> _updateConsumedAmount(int amount) async {
+    DateTime today = DateTime.now();
+
+    if (today.difference(lastConsumptionDate).inDays > 0) {
+      setState(() {
+        consumedAmount = 0;
+        lastConsumptionDate = today;
+      });
+    }
 
     if (selectedQuantity > 0) {
       setState(() {
-        consumedAmount += selectedQuantity;
+        consumedAmount += amount;
         showChoiceChips = false;
         selectedQuantity = 0;
       });
-      if (DateTime.now().difference(lastConsumptionDate).inDays > 0) {
-        setState(() {
-          consumedAmount = selectedQuantity;
-          lastConsumptionDate = DateTime.now();
-        });
-      }
+
+      await _saveConsumptionData(today, amount);
+
       if (consumedAmount >= dailyGoal) {
         _showGoalAchievedDialog();
       }
@@ -80,23 +87,24 @@ class _WaterTrackState extends State<WaterTrack> {
                   'Please select a quantity before updating consumption'),
               actions: [
                 TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('OK'),
-                ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text('OK'))
               ],
             );
           });
-      return;
     }
+  }
+
+  Future<void> _saveConsumptionData(DateTime date, int amount) async {
     final consumptionData = ConsumptionData(
-        consumedDay: DateTime.now(),
-        consumedAmount: consumedAmount,
+        consumedDay: date,
+        consumedAmount: amount,
         reminderInterval: selectedReminderFrequency);
     final box = await Hive.openBox<ConsumptionData>('consumption_data');
     box.add(consumptionData);
-    print('added');
+    print('added $amount');
   }
 
   void _showGoalAchievedDialog() {
@@ -149,11 +157,11 @@ class _WaterTrackState extends State<WaterTrack> {
                   onTap: () {
                     _updateReminderFrequency('Every Minute');
                     LocalNotifications.showSimpleNotifications(
-                        title: 'success',
+                        title: 'succes',
                         body: 'Alarm set',
                         payload: 'watching you');
                     LocalNotifications.showPeriodicNNotifications(
-                        title: 'Drink Water',
+                        title: 'every minute',
                         body: 'this is every minute notification',
                         payload: 'This is periodic data');
                   },
@@ -163,13 +171,13 @@ class _WaterTrackState extends State<WaterTrack> {
                   onTap: () {
                     _updateReminderFrequency('Every five minutes');
                     LocalNotifications.showSimpleNotifications(
-                        title: 'success',
+                        title: 'succes',
                         body: 'Alarm set',
                         payload: 'watching you');
 
                     LocalNotifications.showScheduleNotifications(
-                        title: 'Drink Water',
-                        body: 'this schedule notification is noti after 5 mins',
+                        title: 'schedule notification',
+                        body: 'this is noti after 5 mins',
                         payload: 'this is scheduled');
                   },
                 ),
@@ -178,11 +186,11 @@ class _WaterTrackState extends State<WaterTrack> {
                   onTap: () {
                     _updateReminderFrequency('Every Hour');
                     LocalNotifications.showSimpleNotifications(
-                        title: 'success',
+                        title: 'succes',
                         body: 'Alarm set',
                         payload: 'watching you');
                     LocalNotifications.showPeriodicNNotificationsHourly(
-                        title: 'Drink water',
+                        title: 'Every hour',
                         body: 'This is every Hour Notification',
                         payload: 'This is every hour data');
                   },
@@ -197,7 +205,7 @@ class _WaterTrackState extends State<WaterTrack> {
                         payload: 'watching you');
 
                     LocalNotifications.showScheduleNotificationstwo(
-                        title: 'Drink Water',
+                        title: 'every two hour',
                         body: 'this is every two hour notification',
                         payload: 'this is every two hour data');
                   },
@@ -231,8 +239,8 @@ class _WaterTrackState extends State<WaterTrack> {
       ),
       drawer: const NavBar(),
       body: Container(
-        height: double.infinity,
         width: double.infinity,
+        height: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
@@ -260,8 +268,8 @@ class _WaterTrackState extends State<WaterTrack> {
                     children: [
                       Text(
                         'Daily Goal: $dailyGoal ml',
-                        style:
-                            const TextStyle(fontSize: 20.0, color: Colors.white),
+                        style: const TextStyle(
+                            fontSize: 20.0, color: Colors.white),
                       ),
                       const SizedBox(height: 20.0),
                       AnimatedContainer(
@@ -272,15 +280,16 @@ class _WaterTrackState extends State<WaterTrack> {
                         child: CircularProgressIndicator(
                           value: progress,
                           backgroundColor: Colors.white,
-                          valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.green),
                           strokeWidth: 10.0,
                         ),
                       ),
                       const SizedBox(height: 20.0),
                       Text(
                         'Consumed: $consumedAmount ml',
-                        style:
-                            const TextStyle(fontSize: 18.0, color: Colors.white),
+                        style: const TextStyle(
+                            fontSize: 18.0, color: Colors.white),
                       ),
                     ],
                   ),
@@ -338,9 +347,7 @@ class _WaterTrackState extends State<WaterTrack> {
                     onPressed: () {
                       Navigator.of(context)
                           .push(MaterialPageRoute(builder: (ctx) {
-                        return ConsumptionHistoryScreen(
-                          consumedAmountFromWaterTrack: consumedAmount,
-                        );
+                        return DailyConsumptionScreen();
                       }));
                     },
                     style: ElevatedButton.styleFrom(
@@ -417,6 +424,7 @@ class _WaterTrackState extends State<WaterTrack> {
                                 LocalNotifications.cancelAll();
                                 setState(() {
                                   isReminderSet = false;
+                                  selectedReminderFrequency = '';
                                 });
                               },
                               icon: const Icon(Icons.cancel))
