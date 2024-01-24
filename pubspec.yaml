@@ -61,19 +61,15 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/Well Alert.png
-    - assets/images/29013775_7450359 (1).png
+    - assets/images/29013775_7450359 (1)-min.png
     - assets/images/gggg.png
     - assets/images/rem.png
     - assets/images/[removal.ai]_5a311f65-f830-493f-9085-8c10e9a94563-fun-3d-illustration-cartoon-teenage-girl_183364-80047.png
-    - assets/images/Barin (1).re.png
-    - assets/images/blood.re.png
-    - assets/images/Bone.re.png
     - assets/[removal.ai]_22809c63-fbeb-4910-a3c2-7bd80fe847aa-m028t0135_e_medical_icon_24aug22
       (1).png
-    - assets/images/Plate.png
+    - assets/images/Plate-min.png
     - assets/images/Water (1).png
     - assets/images/Man With Water (1).png
-    - assets/images/[removal.ai]_cccb20b7-4fe2-4fe4-99eb-205d9986fce0-2203-q713-018-s-m012-c10-drinking-water-flat-infographics.png
     - assets/images/[removal.ai]_39505237-d1c4-4812-8fbb-29da30717555-hhup_edt6_220113.png
     - assets/images/[removal.ai]_23c86a64-747b-4fb5-8a0c-37efa66e7e55-oq6c_oqju_160610.png
     - assets/images/[removal.ai]_df0c5e36-04ff-4d38-81c6-ed3f51e6d505-red-lungs-with-white-background-word-heart-it_1308-153031.png
@@ -82,10 +78,8 @@ flutter:
     - assets/images/[removal.ai]_b3eede8f-9dbd-43b5-8214-cd03ff69c2e9-36el_uzef_160616.png
     - assets/images/[removal.ai]_eaeb350f-3c8b-4239-b46c-32c1b9e150ee-nmwy_e2e9_220113.png
     - assets/images/[removal.ai]_f615a221-ce10-4f99-a081-bf00e6da5a03-human-internal-organ-with-intestine_1308-108352.png
-    - assets/images/360_F_109403481_g8LbMgibBxrnl7CBc201wcJsNihOWTF2.webp
     - assets/images/paleo.jpeg
-    - assets/images/keto.jpeg
-    - assets/images/mediteraneean.jpeg
+    - assets/images/mediteraneean-min.jpeg
     - assets/images/27002.jpg
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

@@ -171,7 +171,7 @@ class MainHome extends StatelessWidget {
                                     placeholder:
                                         AssetImage('assets/images/27002.jpg'),
                                     image:
-                                        AssetImage('assets/images/Plate.png'),
+                                        AssetImage('assets/images/Plate-min.png'),
                                     width: 120,
                                     height: 120,
                                   ),

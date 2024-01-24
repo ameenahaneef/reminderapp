@@ -7,17 +7,17 @@
 
     
     <application
-        android:label="newproj"
+        android:label="WellAlert"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
-        <service
+        <receiver
             android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver"
             android:exported="false"
             android:permission="android.permission.BIND_JOB_SERVICE">
             <intent-filter>
                 <action android:name="com.dexterous.flutterlocalnotifications.SCHEDULED_NOTIFICATION_BOOT" />
             </intent-filter>
-        </service>
+        </receiver>
         <activity
             android:name=".MainActivity"
             android:exported="true"

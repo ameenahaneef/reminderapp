@@ -148,7 +148,7 @@ class DietScreen extends StatelessWidget {
       categoryName: 'Mediteranean Diet',
       description:
           'The Mediterranean diet is an excellent diet that has been thoroughly studied. It’s particularly effective for heart disease prevention.It emphasizes foods that were commonly eaten around the Mediterranean region during the 20th century and earlier.As such, it includes plenty of vegetables, fruits, fish, poultry, whole grains, legumes, dairy products, and extra virgin olive oil.',
-      imagePath: 'assets/images/mediteraneean.jpeg',
+      imagePath: 'assets/images/mediteraneean-min.jpeg',
       mealPlan: [
         [
           [

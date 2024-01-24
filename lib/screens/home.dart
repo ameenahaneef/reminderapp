@@ -29,7 +29,7 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       const Image(
                         image: AssetImage(
-                            'assets/images/29013775_7450359 (1).png'),
+                            'assets/images/29013775_7450359 (1)-min.png'),
                         width: 300,
                         height: 300,
                       ),
