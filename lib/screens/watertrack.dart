@@ -357,7 +357,7 @@ class _WaterTrackState extends State<WaterTrack> {
                       'View Consumption History',
                       style: TextStyle(fontSize: 18),
                     )),
-                SizedBox(
+                const SizedBox(
                   height: 10,
                 ),
                 Column(
